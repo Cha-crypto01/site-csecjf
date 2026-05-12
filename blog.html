@@ -238,7 +238,8 @@
     const container = document.getElementById('blogContainer');
     if (!container) return;
 
-    fetch('/api/articles/')
+    var apiBase = window.location.port === '5502' || window.location.port === '5500' ? 'http://127.0.0.1:8000' : '';
+    fetch(apiBase + '/api/articles/')
       .then(function(r) { if (!r.ok) throw new Error('Serveur indisponible'); return r.json(); })
       .then(function(apiArticles) {
         if (apiArticles && apiArticles.length > 0) {
