@@ -263,6 +263,9 @@ section {
 .page-hero-blog {
   background-image: url("../image/blog/activitéscsecjf.jpeg");
 }
+.page-hero-galerie {
+  background-image: url("../image/accueil/activitésCSECFJ.jpeg");
+}
 
 /* Breadcrumb dans le hero */
 .hero-breadcrumb {
