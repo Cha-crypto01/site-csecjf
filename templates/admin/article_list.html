@@ -1,0 +1,129 @@
+{% extends "admin/base.html" %}{% load static %}
+{% block title %}Articles — CSECJF Admin{% endblock %}
+{% block page_title %}Gestion des articles{% endblock %}
+{% block breadcrumb %}<a href="{% url 'admin_dashboard' %}">Dashboard</a> / Articles{% endblock %}
+{% block header_actions %}
+<a href="{% url 'article_create' %}" class="btn btn-primary">
+  <span class="material-symbols-outlined">add</span> Nouvel article
+</a>
+{% endblock %}
+
+{% block content %}
+<div class="card">
+  <div class="flex-between mb-2">
+    <form method="get" class="flex" style="align-items: end;">
+      <div>
+        <label class="text-sm" style="display:block;margin-bottom:0.25rem;color:#64748b;">Statut</label>
+        <select name="status" class="form-input" style="padding:0.4rem 0.7rem;border:1.5px solid #e2e8f0;border-radius:0.5rem;font-size:0.85rem;" onchange="this.form.submit()">
+          <option value="">Tous</option>
+          <option value="brouillon" {% if current_status == 'brouillon' %}selected{% endif %}>Brouillon</option>
+          <option value="publie" {% if current_status == 'publie' %}selected{% endif %}>Publié</option>
+        </select>
+      </div>
+      <div>
+        <label class="text-sm" style="display:block;margin-bottom:0.25rem;color:#64748b;">Catégorie</label>
+        <select name="category" class="form-input" style="padding:0.4rem 0.7rem;border:1.5px solid #e2e8f0;border-radius:0.5rem;font-size:0.85rem;" onchange="this.form.submit()">
+          <option value="">Toutes</option>
+          <option value="Accompagnement" {% if current_category == 'Accompagnement' %}selected{% endif %}>Accompagnement</option>
+          <option value="Partenariat" {% if current_category == 'Partenariat' %}selected{% endif %}>Partenariat</option>
+          <option value="Formation" {% if current_category == 'Formation' %}selected{% endif %}>Formation</option>
+          <option value="Événement" {% if current_category == 'Événement' %}selected{% endif %}>Événement</option>
+          <option value="Communauté" {% if current_category == 'Communauté' %}selected{% endif %}>Communauté</option>
+        </select>
+      </div>
+      {% if current_status or current_category %}
+      <a href="{% url 'article_list' %}" class="btn btn-outline btn-sm">Réinitialiser</a>
+      {% endif %}
+    </form>
+  </div>
+
+  {% if articles %}
+  <table>
+    <thead>
+      <tr>
+        <th>Titre</th>
+        <th>Auteur</th>
+        <th>Catégorie</th>
+        <th>Statut</th>
+        <th>Date</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for article in articles %}
+      <tr>
+        <td><strong>{{ article.title }}</strong>{% if article.subtitle %}<br><span class="text-muted text-sm">{{ article.subtitle }}</span>{% endif %}</td>
+        <td>{{ article.author.get_full_name|default:article.author.username|default:"—" }}</td>
+        <td><span class="badge badge-info">{{ article.category }}</span></td>
+        <td>
+          {% if article.status == 'publie' %}
+          <span class="badge badge-success">Publié</span>
+          {% else %}
+          <span class="badge badge-warning">Brouillon</span>
+          {% endif %}
+        </td>
+        <td class="text-muted text-sm">{{ article.created_at|date:"d/m/Y H:i" }}</td>
+        <td>
+          <div class="flex gap-1">
+            <a href="{% url 'article_edit' article.id %}" class="btn btn-outline btn-sm">Modifier</a>
+            <a href="{% url 'article_delete' article.id %}" class="btn btn-danger btn-sm">Supprimer</a>
+          </div>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  {% if articles.has_other_pages %}
+  <div class="pagination" style="display:flex;justify-content:center;gap:0.5rem;margin-top:1.5rem;">
+    {% if articles.has_previous %}
+    <a href="?page=1{% if current_status %}&status={{ current_status }}{% endif %}{% if current_category %}&category={{ current_category }}{% endif %}" class="btn btn-outline btn-sm">&laquo;</a>
+    <a href="?page={{ articles.previous_page_number }}{% if current_status %}&status={{ current_status }}{% endif %}{% if current_category %}&category={{ current_category }}{% endif %}" class="btn btn-outline btn-sm">&lsaquo;</a>
+    {% endif %}
+    <span class="btn btn-sm" style="background:#f1f5f9;border:none;">Page {{ articles.number }}/{{ articles.paginator.num_pages }}</span>
+    {% if articles.has_next %}
+    <a href="?page={{ articles.next_page_number }}{% if current_status %}&status={{ current_status }}{% endif %}{% if current_category %}&category={{ current_category }}{% endif %}" class="btn btn-outline btn-sm">&rsaquo;</a>
+    <a href="?page={{ articles.paginator.num_pages }}{% if current_status %}&status={{ current_status }}{% endif %}{% if current_category %}&category={{ current_category }}{% endif %}" class="btn btn-outline btn-sm">&raquo;</a>
+    {% endif %}
+  </div>
+  {% endif %}
+
+  {% else %}
+  <div class="empty-state">
+    <span class="icon material-symbols-outlined">newspaper</span>
+    <p>Aucun article trouvé.</p>
+    <a href="{% url 'article_create' %}" class="btn btn-primary mt-1">Créer le premier article</a>
+  </div>
+  {% endif %}
+</div>
+
+{% if deleted_articles %}
+<div class="card" style="margin-top:2rem;border:1px solid #fecaca;">
+  <h3 style="display:flex;align-items:center;gap:0.5rem;color:#dc2626;">
+    <span class="material-symbols-outlined">delete</span> Corbeille ({{ deleted_articles|length }})
+  </h3>
+  <table>
+    <thead>
+      <tr>
+        <th>Titre</th>
+        <th>Auteur</th>
+        <th>Supprimé le</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for article in deleted_articles %}
+      <tr style="opacity:0.7;">
+        <td><strong>{{ article.title }}</strong></td>
+        <td>{{ article.author.get_full_name|default:article.author.username|default:"—" }}</td>
+        <td class="text-muted text-sm">{{ article.deleted_at|date:"d/m/Y H:i" }}</td>
+        <td>
+          <a href="{% url 'article_restore' article.id %}" class="btn btn-outline btn-sm" style="color:#10b981;border-color:#10b981;">Restaurer</a>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endif %}
+{% endblock %}

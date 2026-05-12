@@ -1,0 +1,146 @@
+<!DOCTYPE html>{% load static %}{% now "Y" as current_year %}
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}Administration CSECJF{% endblock %}</title>
+  <link rel="icon" type="image/png" sizes="32x32" href="{% static 'image/accueil/favicon-csecjf.png' %}">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=DM+Sans:wght@300;400;500;600&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+  <link href="{% static 'css/main.css' %}" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'DM Sans', sans-serif; background: #f8fafc; display: flex; min-height: 100vh; }
+    .admin-sidebar { width: 260px; background: linear-gradient(180deg, #0b1120 0%, #1a2332 100%); color: white; padding: 2rem 0; display: flex; flex-direction: column; position: fixed; top: 0; left: 0; height: 100vh; overflow-y: auto; z-index: 100; }
+    .admin-sidebar .logo { display: flex; align-items: center; gap: 0.75rem; padding: 0 1.5rem; margin-bottom: 2rem; }
+    .admin-sidebar .logo img { height: 2.5rem; width: auto; border-radius: 6px; }
+    .admin-sidebar .logo h2 { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 1.1rem; font-weight: 800; color: white; }
+    .admin-sidebar .nav-label { padding: 0.5rem 1.5rem; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1.5px; color: rgba(255,255,255,0.35); margin-top: 0.5rem; }
+    .admin-sidebar a { display: flex; align-items: center; gap: 0.75rem; padding: 0.75rem 1.5rem; color: rgba(255,255,255,0.7); text-decoration: none; font-size: 0.9rem; transition: all 0.2s; border-left: 3px solid transparent; }
+    .admin-sidebar a:hover, .admin-sidebar a.active { background: rgba(255,255,255,0.08); color: white; border-left-color: #04c0ff; }
+    .admin-sidebar a .material-symbols-outlined { font-size: 1.25rem; }
+    .admin-sidebar .spacer { flex: 1; }
+    .admin-sidebar .user-info { padding: 1rem 1.5rem; border-top: 1px solid rgba(255,255,255,0.1); margin-top: auto; }
+    .admin-sidebar .user-info .name { font-weight: 600; font-size: 0.85rem; color: white; }
+    .admin-sidebar .user-info .role { font-size: 0.75rem; color: rgba(255,255,255,0.5); }
+    .admin-main { flex: 1; margin-left: 260px; padding: 2rem; }
+    .admin-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; }
+    .admin-header h1 { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 1.5rem; font-weight: 800; color: #0b1120; }
+    .admin-header .breadcrumb { font-size: 0.85rem; color: #8898aa; }
+    .admin-header .breadcrumb a { color: #04c0ff; text-decoration: none; }
+    .admin-header .breadcrumb a:hover { text-decoration: underline; }
+    .toast-container { position: fixed; top: 1.5rem; right: 1.5rem; z-index: 9999; display: flex; flex-direction: column; gap: 0.75rem; }
+    .toast { padding: 1rem 1.5rem; border-radius: 0.75rem; color: white; font-weight: 500; font-size: 0.9rem; box-shadow: 0 8px 30px rgba(0,0,0,0.15); animation: slideIn 0.3s ease, fadeOut 0.3s ease 4.7s forwards; }
+    .toast.success { background: #10b981; }
+    .toast.error { background: #ef4444; }
+    .toast.info { background: #3b82f6; }
+    @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+    @keyframes fadeOut { to { opacity: 0; transform: translateX(50px); } }
+    .btn { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.6rem 1.2rem; border-radius: 0.5rem; font-weight: 600; font-size: 0.85rem; text-decoration: none; border: none; cursor: pointer; font-family: 'DM Sans', sans-serif; transition: all 0.2s; }
+    .btn-primary { background: #04c0ff; color: white; }
+    .btn-primary:hover { background: #03a8e0; }
+    .btn-success { background: #10b981; color: white; }
+    .btn-success:hover { background: #059669; }
+    .btn-danger { background: #ef4444; color: white; }
+    .btn-danger:hover { background: #dc2626; }
+    .btn-warning { background: #f59e0b; color: white; }
+    .btn-warning:hover { background: #d97706; }
+    .btn-outline { background: transparent; border: 1.5px solid #e2e8f0; color: #64748b; }
+    .btn-outline:hover { background: #f1f5f9; }
+    .btn-sm { padding: 0.35rem 0.8rem; font-size: 0.8rem; }
+    .card { background: white; border-radius: 1rem; padding: 1.5rem; box-shadow: 0 1px 3px rgba(0,0,0,0.05); margin-bottom: 1.5rem; }
+    .card h2 { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 1.1rem; font-weight: 700; color: #0b1120; margin-bottom: 1rem; }
+    table { width: 100%; border-collapse: collapse; }
+    th { text-align: left; padding: 0.75rem 1rem; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px; color: #8898aa; border-bottom: 2px solid #e2e8f0; }
+    td { padding: 0.75rem 1rem; border-bottom: 1px solid #f1f5f9; font-size: 0.9rem; color: #1e293b; }
+    tr:hover td { background: #f8fafc; }
+    .badge { display: inline-block; padding: 0.2rem 0.6rem; border-radius: 999px; font-size: 0.75rem; font-weight: 600; }
+    .badge-success { background: #d1fae5; color: #065f46; }
+    .badge-warning { background: #fef3c7; color: #92400e; }
+    .badge-danger { background: #fee2e2; color: #991b1b; }
+    .badge-info { background: #dbeafe; color: #1e40af; }
+    .form-group { margin-bottom: 1rem; }
+    .form-group label { display: block; font-weight: 600; font-size: 0.85rem; color: #334155; margin-bottom: 0.35rem; }
+    .form-group .help-text { font-size: 0.75rem; color: #94a3b8; margin-top: 0.25rem; }
+    .form-group input[type="text"], .form-group input[type="email"], .form-group input[type="password"], .form-group select, .form-group textarea { width: 100%; padding: 0.7rem 0.9rem; border: 1.5px solid #e2e8f0; border-radius: 0.5rem; font-size: 0.9rem; font-family: 'DM Sans', sans-serif; transition: border-color 0.2s; }
+    .form-group input:focus, .form-group select:focus, .form-group textarea:focus { outline: none; border-color: #04c0ff; }
+    .form-group .errorlist { list-style: none; color: #ef4444; font-size: 0.8rem; margin-top: 0.25rem; }
+    .form-actions { display: flex; gap: 0.75rem; margin-top: 1.5rem; align-items: center; }
+    .stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 2rem; }
+    .stat-card { background: white; border-radius: 1rem; padding: 1.5rem; box-shadow: 0 1px 3px rgba(0,0,0,0.05); text-align: center; }
+    .stat-card .icon { font-size: 2rem; margin-bottom: 0.5rem; display: block; }
+    .stat-card .number { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 1.75rem; font-weight: 800; color: #0b1120; }
+    .stat-card .label { font-size: 0.8rem; color: #8898aa; margin-top: 0.25rem; }
+    .flex { display: flex; gap: 1rem; flex-wrap: wrap; }
+    .flex-between { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; }
+    .text-muted { color: #8898aa; }
+    .text-sm { font-size: 0.85rem; }
+    .mt-1 { margin-top: 0.5rem; }
+    .mt-2 { margin-top: 1rem; }
+    .mb-1 { margin-bottom: 0.5rem; }
+    .mb-2 { margin-bottom: 1rem; }
+    .gap-1 { gap: 0.5rem; }
+    .empty-state { text-align: center; padding: 3rem; color: #94a3b8; }
+    .empty-state .icon { font-size: 3rem; margin-bottom: 1rem; display: block; }
+    .activity-item { display: flex; align-items: flex-start; gap: 0.75rem; padding: 0.75rem 0; border-bottom: 1px solid #f1f5f9; }
+    .activity-item:last-child { border-bottom: none; }
+    .activity-item .dot { width: 8px; height: 8px; border-radius: 50%; margin-top: 0.4rem; flex-shrink: 0; }
+    .activity-item .content { flex: 1; }
+    .activity-item .content .action-text { font-size: 0.85rem; color: #1e293b; }
+    .activity-item .content .time { font-size: 0.75rem; color: #94a3b8; }
+    @media (max-width: 768px) { .admin-sidebar { width: 60px; } .admin-sidebar .logo h2, .admin-sidebar .nav-label, .admin-sidebar a span:not(.material-symbols-outlined), .admin-sidebar .user-info { display: none; } .admin-main { margin-left: 60px; padding: 1rem; } }
+  </style>
+  {% block extra_head %}{% endblock %}
+</head>
+<body>
+  {% if messages %}
+  <div class="toast-container">
+    {% for message in messages %}
+    <div class="toast {{ message.tags }}">{{ message }}</div>
+    {% endfor %}
+  </div>
+  {% endif %}
+
+  <aside class="admin-sidebar">
+    <div class="logo">
+      <img src="{% static 'image/shared/Logo-csecjf.png' %}" alt="CSECJF">
+      <h2>CSECJF Admin</h2>
+    </div>
+    <div class="nav-label">Navigation</div>
+    <a href="{% url 'admin_dashboard' %}" class="{% if request.resolver_match.url_name == 'admin_dashboard' %}active{% endif %}">
+      <span class="material-symbols-outlined">dashboard</span><span>Dashboard</span>
+    </a>
+    <a href="{% url 'article_list' %}" class="{% if 'article' in request.resolver_match.url_name %}active{% endif %}">
+      <span class="material-symbols-outlined">article</span><span>Articles</span>
+    </a>
+    <a href="{% url 'gallery_list' %}" class="{% if 'gallery' in request.resolver_match.url_name %}active{% endif %}">
+      <span class="material-symbols-outlined">photo_library</span><span>Galerie</span>
+    </a>
+    {% if request.user.is_super_admin %}
+    <a href="{% url 'user_list' %}" class="{% if 'user' in request.resolver_match.url_name %}active{% endif %}">
+      <span class="material-symbols-outlined">group</span><span>Utilisateurs</span>
+    </a>
+    {% endif %}
+    <div class="spacer"></div>
+    <div class="user-info">
+      <div class="name">{{ request.user.get_full_name|default:request.user.username }}</div>
+      <div class="role">{{ request.user.get_role_display }}</div>
+    </div>
+    <a href="{% url 'logout' %}">
+      <span class="material-symbols-outlined">logout</span><span>Déconnexion</span>
+    </a>
+  </aside>
+
+  <main class="admin-main">
+    <div class="admin-header">
+      <div>
+        <h1>{% block page_title %}Administration{% endblock %}</h1>
+        <div class="breadcrumb">{% block breadcrumb %}<a href="{% url 'admin_dashboard' %}">Dashboard</a>{% endblock %}</div>
+      </div>
+      <div>{% block header_actions %}{% endblock %}</div>
+    </div>
+    {% block content %}{% endblock %}
+  </main>
+
+  {% block extra_js %}{% endblock %}
+</body>
+</html>

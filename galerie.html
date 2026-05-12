@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Galerie - CSECJF | Photos du Centre de Guinaw Rails Sud</title>
+  <meta name="description" content="Galerie photos du CSECJF de Guinaw Rails Sud : activités, formations, événements communautaires et infrastructures.">
+  <meta property="og:title" content="Galerie CSECJF - Guinaw Rails Sud">
+  <meta property="og:description" content="Explorez en images les activités et infrastructures du Centre Socio-Éducatif de Guinaw Rails Sud.">
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="fr_SN">
+  <link rel="icon" type="image/png" sizes="32x32" href="/static/image/accueil/favicon-csecjf.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=DM+Sans:wght@300;400;500;600&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+  <link href="/static/css/main.css" rel="stylesheet">
+  <style>
+    .gallery-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.25rem; }
+    .gallery-item { border-radius: 0.75rem; overflow: hidden; cursor: pointer; position: relative; aspect-ratio: 4/3; box-shadow: 0 4px 15px rgba(0,0,0,0.08); transition: transform 0.3s, box-shadow 0.3s; }
+    .gallery-item:hover { transform: translateY(-4px); box-shadow: 0 12px 30px rgba(0,0,0,0.15); }
+    .gallery-item img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s; }
+    .gallery-item:hover img { transform: scale(1.08); }
+    .gallery-item .label { position: absolute; bottom: 0; left: 0; right: 0; padding: 0.75rem 1rem; background: linear-gradient(transparent, rgba(0,0,0,0.7)); color: white; font-size: 0.85rem; font-weight: 500; opacity: 0; transition: opacity 0.3s; }
+    .gallery-item:hover .label { opacity: 1; }
+    .gallery-categories { display: flex; gap: 0.5rem; justify-content: center; flex-wrap: wrap; margin-bottom: 2.5rem; }
+    .gallery-categories button { padding: 0.5rem 1.2rem; border-radius: 999px; border: 1.5px solid #e2e8f0; background: white; font-family: 'DM Sans', sans-serif; font-size: 0.85rem; cursor: pointer; transition: all 0.2s; color: #64748b; }
+    .gallery-categories button.active, .gallery-categories button:hover { background: #04c0ff; border-color: #04c0ff; color: white; }
+    .lightbox { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.92); z-index: 9999; align-items: center; justify-content: center; padding: 2rem; }
+    .lightbox.active { display: flex; }
+    .lightbox img { max-width: 90vw; max-height: 90vh; border-radius: 0.5rem; box-shadow: 0 20px 60px rgba(0,0,0,0.5); }
+    .lightbox .close { position: absolute; top: 1.5rem; right: 2rem; color: white; font-size: 2rem; cursor: pointer; background: none; border: none; font-family: 'DM Sans', sans-serif; }
+    .lightbox .nav { position: absolute; top: 50%; transform: translateY(-50%); color: white; font-size: 2.5rem; cursor: pointer; background: rgba(255,255,255,0.1); border: none; width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; transition: background 0.2s; }
+    .lightbox .nav:hover { background: rgba(255,255,255,0.2); }
+    .lightbox .prev { left: 1.5rem; }
+    .lightbox .next { right: 1.5rem; }
+    .lightbox .counter { position: absolute; bottom: 1.5rem; color: rgba(255,255,255,0.6); font-size: 0.85rem; }
+  </style>
+</head>
+<body>
+<main>
+  <aside class="page-sidebar">
+    <h4>Navigation</h4>
+    <a href="index.html">Accueil</a>
+    <a href="about.html">À Propos</a>
+    <a href="services.html">Services</a>
+    <a href="achievements.html">Réalisations</a>
+    <a href="galerie.html" class="active">Galerie</a>
+    <a href="blog.html">Blog</a>
+    <a href="contact.html">Contact</a>
+  </aside>
+
+  <section class="page-hero page-hero-galerie">
+    <div class="container">
+      <h1 class="section-title">Notre <span class="accent">Galerie</span></h1>
+      <p>Découvrez en images les activités, formations et événements du CSECJF de Guinaw Rails Sud.</p>
+    </div>
+  </section>
+
+  <section style="padding: 3rem 2rem 5rem;">
+    <div class="container">
+      <div class="gallery-categories">
+        <button class="active" data-filter="all">Toutes</button>
+        <button data-filter="activites">Activités</button>
+        <button data-filter="formations">Formations</button>
+        <button data-filter="infrastructures">Infrastructures</button>
+      </div>
+
+      <div class="gallery-grid" id="galleryGrid">
+        <div class="empty-state" style="grid-column:1/-1;text-align:center;padding:3rem;color:#8898aa;" id="emptyState">
+          <span class="material-symbols-outlined" style="font-size:3rem;display:block;margin-bottom:0.75rem;">photo_library</span>
+          <p>Chargement des photos...</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section style="padding: 4rem 2rem; background: linear-gradient(135deg, #04c0ff 0%, #004aad 100%); color: white;">
+    <div class="container text-center">
+      <h2 class="section-title" style="color: white;">Vous avez des photos à partager ?</h2>
+      <p style="color: rgba(255, 255, 255, 0.9); margin-bottom: 2rem; max-width: 40rem; margin-left: auto; margin-right: auto;">
+        Chaque image raconte une histoire. Contactez-nous pour contribuer à la mémoire visuelle de Guinaw Rails Sud.
+      </p>
+      <a href="contact.html" class="btn btn-secondary" style="background: white; color: #004aad;">Nous contacter</a>
+    </div>
+  </section>
+</main>
+
+<!-- Lightbox -->
+<div class="lightbox" id="lightbox">
+  <button class="close" id="lightboxClose">&times;</button>
+  <button class="nav prev" id="lightboxPrev">&#8249;</button>
+  <button class="nav next" id="lightboxNext">&#8250;</button>
+  <img id="lightboxImg" src="" alt="">
+  <div class="counter" id="lightboxCounter"></div>
+</div>
+
+<!-- Footer -->
+<footer>
+  <div class="footer-container">
+    <div class="footer-section">
+      <h4>CSECJF</h4>
+      <p style="color: rgba(255,255,255,0.7); font-size: 0.875rem; line-height: 1.6; margin-bottom: 1rem;">Dispositif de proximité à l'économie locale</p>
+      <p style="color: rgba(255,255,255,0.5); font-size: 0.75rem;">&copy; 2026 CSECJF Guinaw Rails Sud. Tous droits réservés.</p>
+    </div>
+    <div class="footer-section">
+      <h4>Pages</h4>
+      <a href="index.html">Accueil</a>
+      <a href="about.html">À Propos</a>
+      <a href="services.html">Services</a>
+      <a href="achievements.html">Réalisations</a>
+      <a href="galerie.html">Galerie</a>
+      <a href="blog.html">Blog</a>
+    </div>
+    <div class="footer-section">
+      <h4>Ressources</h4>
+      <a href="#">Conditions d'utilisation</a>
+      <a href="#">Politique de confidentialité</a>
+      <a href="#">FAQ</a>
+    </div>
+    <div class="footer-section">
+      <h4>Suivez-nous</h4>
+      <div style="display: flex; gap: 0.75rem;">
+        <a href="https://www.facebook.com/profile.php?id=61568024399710" target="_blank" rel="noopener noreferrer" style="display: inline-flex; align-items: center; justify-content: center; width: 2.5rem; height: 2.5rem; background-color: #04c0ff; color: white; border-radius: 50%; text-decoration: none; transition: opacity 0.3s;">
+           <img src="/static/image/shared/facebook-logo (2).png" alt="Facebook" style="width: 1.75rem; height: 1.75rem;" loading="lazy">
+        </a>
+        <a href="https://www.linkedin.com/company/centre-socio-%C3%A9ducatif-des-jeunes-de-guinaw-rails/about/?viewAsMember=true" target="_blank" rel="noopener noreferrer" style="display: inline-flex; align-items: center; justify-content: center; width: 2.5rem; height: 2.5rem; background-color: #04c0ff; color: white; border-radius: 50%; text-decoration: none; transition: opacity 0.3s;">
+           <img src="/static/image/shared/linkedin-logo.png" alt="LinkedIn" style="width: 1.75rem; height: 1.75rem;" loading="lazy">
+        </a>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>Construit avec passion pour Guinaw Rails Sud</p>
+  </div>
+</footer>
+
+<script src="/static/js/main.js" defer></script>
+<script>
+(function() {
+  const grid = document.getElementById('galleryGrid');
+  const emptyState = document.getElementById('emptyState');
+  const lightbox = document.getElementById('lightbox');
+  const lightboxImg = document.getElementById('lightboxImg');
+  const lightboxCounter = document.getElementById('lightboxCounter');
+  const closeBtn = document.getElementById('lightboxClose');
+  const prevBtn = document.getElementById('lightboxPrev');
+  const nextBtn = document.getElementById('lightboxNext');
+  let items = [];
+  let currentIndex = 0;
+
+  function loadImages() {
+    var apiBase = window.location.port === '5502' || window.location.port === '5500' ? 'http://127.0.0.1:8000' : '';
+    fetch(apiBase + '/api/gallery/')
+      .then(function(r) { return r.json(); })
+      .then(function(images) {
+        if (!images || images.length === 0) {
+          emptyState.innerHTML = '<span class="material-symbols-outlined" style="font-size:3rem;display:block;margin-bottom:0.75rem;">photo_library</span><p>Aucune photo dans la galerie pour le moment.</p>';
+          return;
+        }
+        emptyState.style.display = 'none';
+        grid.innerHTML = images.map(function(img) {
+          return '<div class="gallery-item" data-category="' + img.category + '">' +
+            '<img src="' + img.url + '" alt="' + (img.caption || 'Photo CSECJF') + '" loading="lazy">' +
+            (img.caption ? '<div class="label">' + img.caption + '</div>' : '') +
+            '</div>';
+        }).join('');
+        items = document.querySelectorAll('.gallery-item');
+        items.forEach(function(item, index) {
+          item.addEventListener('click', function() { openLightbox(index); });
+        });
+      })
+      .catch(function() {
+        emptyState.innerHTML = '<span class="material-symbols-outlined" style="font-size:3rem;display:block;margin-bottom:0.75rem;">error</span><p>Erreur de chargement des photos.</p>';
+      });
+  }
+
+  function openLightbox(index) {
+    currentIndex = index;
+    var img = items[index].querySelector('img');
+    lightboxImg.src = img.src;
+    lightboxImg.alt = img.alt;
+    lightboxCounter.textContent = (index + 1) + ' / ' + items.length;
+    lightbox.classList.add('active');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeLightbox() {
+    lightbox.classList.remove('active');
+    document.body.style.overflow = '';
+  }
+
+  function prevImage() {
+    currentIndex = (currentIndex - 1 + items.length) % items.length;
+    openLightbox(currentIndex);
+  }
+
+  function nextImage() {
+    currentIndex = (currentIndex + 1) % items.length;
+    openLightbox(currentIndex);
+  }
+
+  closeBtn.addEventListener('click', closeLightbox);
+  prevBtn.addEventListener('click', prevImage);
+  nextBtn.addEventListener('click', nextImage);
+
+  document.addEventListener('keydown', function(e) {
+    if (!lightbox.classList.contains('active')) return;
+    if (e.key === 'Escape') closeLightbox();
+    if (e.key === 'ArrowLeft') prevImage();
+    if (e.key === 'ArrowRight') nextImage();
+  });
+
+  lightbox.addEventListener('click', function(e) {
+    if (e.target === lightbox) closeLightbox();
+  });
+
+  var filterButtons = document.querySelectorAll('.gallery-categories button');
+  filterButtons.forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      filterButtons.forEach(function(b) { b.classList.remove('active'); });
+      this.classList.add('active');
+      var filter = this.dataset.filter;
+      items.forEach(function(item) {
+        if (filter === 'all' || item.dataset.category === filter) {
+          item.style.display = '';
+        } else {
+          item.style.display = 'none';
+        }
+      });
+    });
+  });
+
+  loadImages();
+})();
+</script>
+</body>
+</html>

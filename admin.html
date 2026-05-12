@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Blog - CSECJF</title>
+  <link rel="icon" type="image/png" sizes="32x32" href="/static/image/accueil/favicon-csecjf.png">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=DM+Sans:wght@300;400;500;600&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+  <link href="/static/css/main.css" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'DM Sans', sans-serif; background: #f5f7fa; }
+
+    /* LOGIN */
+    .login-page { display: flex; align-items: center; justify-content: center; min-height: 100vh; background: linear-gradient(135deg, #0b1120 0%, #004aad 100%); }
+    .login-box { background: white; border-radius: 1.25rem; padding: 3rem; width: 100%; max-width: 400px; box-shadow: 0 20px 60px rgba(0,0,0,0.3); }
+    .login-box h1 { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 1.5rem; font-weight: 800; color: #0b1120; margin-bottom: 0.5rem; }
+    .login-box p { color: #8898aa; font-size: 0.9rem; margin-bottom: 2rem; }
+    .login-box input { width: 100%; padding: 0.9rem 1rem; border: 1.5px solid #e2e8f0; border-radius: 0.75rem; font-size: 1rem; margin-bottom: 1rem; font-family: 'DM Sans', sans-serif; transition: border-color 0.2s; }
+    .login-box input:focus { outline: none; border-color: #04c0ff; }
+    .login-box button { width: 100%; padding: 0.9rem; border: none; border-radius: 0.75rem; background: #04c0ff; color: white; font-weight: 700; font-size: 1rem; cursor: pointer; font-family: 'DM Sans', sans-serif; transition: background 0.2s; }
+    .login-box button:hover { background: #03a8e0; }
+    .login-error { color: #ef4444; font-size: 0.85rem; margin-top: 0.75rem; display: none; }
+
+    /* ADMIN LAYOUT */
+    .admin-layout { display: flex; min-height: 100vh; }
+    .admin-sidebar { width: 260px; background: #0b1120; padding: 2rem 1.5rem; flex-shrink: 0; display: flex; flex-direction: column; }
+    .admin-sidebar h2 { color: white; font-family: 'Plus Jakarta Sans', sans-serif; font-size: 1.25rem; margin-bottom: 2rem; display: flex; align-items: center; gap: 0.5rem; }
+    .admin-sidebar a, .admin-sidebar button { display: flex; align-items: center; gap: 0.75rem; color: rgba(255,255,255,0.6); text-decoration: none; padding: 0.75rem 1rem; border-radius: 0.5rem; margin-bottom: 0.25rem; font-weight: 500; transition: all 0.2s; background: none; border: none; cursor: pointer;     font-family: 'DM Sans', sans-serif; font-size: 0.9rem; width: 100%; text-align: left; }
+    .admin-sidebar a:hover, .admin-sidebar button:hover, .admin-sidebar a.active { background: rgba(4,192,255,0.15); color: #04c0ff; }
+    .admin-sidebar .spacer { flex: 1; }
+    .admin-sidebar .logout-btn { color: rgba(255,255,255,0.4); border-top: 1px solid rgba(255,255,255,0.08); margin-top: 1rem; padding-top: 1rem; border-radius: 0; }
+    .admin-sidebar .logout-btn:hover { color: #ef4444; background: none; }
+
+    .admin-main { flex: 1; padding: 2.5rem; max-width: 100%; overflow-x: hidden; }
+    .admin-main h1 { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 1.75rem; font-weight: 800; color: #0b1120; margin-bottom: 0.5rem; }
+    .admin-main > .page-desc { color: #52637a; margin-bottom: 2rem; }
+
+    .admin-card { background: white; border-radius: 1rem; padding: 1.5rem; box-shadow: 0 4px 16px rgba(0,0,0,0.06); margin-bottom: 1.5rem; }
+    .admin-card h3 { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 700; font-size: 1.125rem; color: #0b1120; margin-bottom: 1.25rem; }
+
+    .form-group { margin-bottom: 1.25rem; }
+    .form-group label { display: block; font-weight: 600; font-size: 0.875rem; color: #1e2a3b; margin-bottom: 0.4rem; }
+    .form-group input, .form-group select { width: 100%; padding: 0.7rem 1rem; border: 1.5px solid #e2e8f0; border-radius: 0.5rem; font-family: 'DM Sans', sans-serif; font-size: 0.95rem; transition: border-color 0.2s; }
+    .form-group input:focus, .form-group select:focus { outline: none; border-color: #04c0ff; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+
+    /* RICH TEXT EDITOR */
+    .editor-toolbar { display: flex; gap: 0.25rem; padding: 0.5rem; border: 1.5px solid #e2e8f0; border-bottom: none; border-radius: 0.5rem 0.5rem 0 0; background: #fafbfc; flex-wrap: wrap; }
+    .editor-toolbar button { width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; border: none; background: transparent; border-radius: 0.375rem; cursor: pointer; color: #52637a; font-size: 1.1rem; transition: all 0.15s; font-family: 'DM Sans', sans-serif; font-weight: 600; }
+    .editor-toolbar button:hover { background: #e2e8f0; color: #0b1120; }
+    .editor-toolbar .sep { width: 1px; background: #e2e8f0; margin: 0 0.25rem; }
+    #richEditor { min-height: 300px; border: 1.5px solid #e2e8f0; border-radius: 0 0 0.5rem 0.5rem; padding: 1rem; font-family: 'DM Sans', sans-serif; font-size: 0.95rem; line-height: 1.8; color: #1e2a3b; outline: none; overflow-y: auto; }
+    #richEditor:focus { border-color: #04c0ff; }
+    #richEditor h3 { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 1.125rem; font-weight: 700; color: #0b1120; margin: 1.5rem 0 0.75rem; }
+    #richEditor p { margin-bottom: 0.75rem; }
+    #richEditor ul, #richEditor ol { padding-left: 1.5rem; margin-bottom: 0.75rem; }
+    #richEditor li { margin-bottom: 0.25rem; }
+    #richEditor strong { font-weight: 700; }
+
+    /* IMAGE UPLOAD */
+    .img-dropzone { border: 2px dashed #e2e8f0; border-radius: 0.75rem; padding: 2rem; text-align: center; cursor: pointer; transition: all 0.2s; }
+    .img-dropzone:hover { border-color: #04c0ff; background: rgba(4,192,255,0.03); }
+    .img-dropzone .icon { font-size: 2.5rem; color: #04c0ff; }
+    .img-dropzone p { color: #8898aa; font-size: 0.9rem; margin-top: 0.5rem; }
+    .img-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 0.75rem; margin-top: 1rem; }
+    .img-item { position: relative; aspect-ratio: 1; border-radius: 0.5rem; overflow: hidden; border: 1px solid #e2e8f0; background: #fafbfc; }
+    .img-item img { width: 100%; height: 100%; object-fit: cover; }
+    .img-item .del { position: absolute; top: 4px; right: 4px; background: rgba(0,0,0,0.6); color: white; border: none; border-radius: 50%; width: 24px; height: 24px; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 16px; line-height: 1; }
+    .img-item .size { position: absolute; bottom: 4px; left: 4px; background: rgba(0,0,0,0.7); color: white; font-size: 0.65rem; padding: 0.125rem 0.375rem; border-radius: 0.25rem; }
+
+    /* BUTTONS */
+    .btn { padding: 0.7rem 1.5rem; border: none; border-radius: 0.5rem; font-weight: 600; cursor: pointer; font-family: 'DM Sans', sans-serif; font-size: 0.9rem; transition: all 0.2s; display: inline-flex; align-items: center; gap: 0.4rem; }
+    .btn-primary { background: #04c0ff; color: white; }
+    .btn-primary:hover { background: #03a8e0; }
+    .btn-danger { background: #ef4444; color: white; }
+    .btn-danger:hover { background: #dc2626; }
+    .btn-outline { background: transparent; border: 1.5px solid #e2e8f0; color: #52637a; }
+    .btn-outline:hover { border-color: #04c0ff; color: #04c0ff; }
+    .btn-sm { padding: 0.4rem 1rem; font-size: 0.8rem; }
+
+    /* ARTICLE LIST */
+    .article-item { display: flex; align-items: center; justify-content: space-between; padding: 1rem 0; border-bottom: 1px solid #f0f2f5; gap: 1rem; }
+    .article-item:last-child { border-bottom: none; }
+    .article-item .info { flex: 1; min-width: 0; }
+    .article-item .info h4 { font-weight: 600; color: #0b1120; margin-bottom: 0.2rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .article-item .info p { font-size: 0.82rem; color: #8898aa; }
+    .article-item .actions { display: flex; gap: 0.5rem; flex-shrink: 0; }
+
+    .empty-state { text-align: center; padding: 3rem 1rem; color: #8898aa; }
+    .empty-state .material-symbols-outlined { font-size: 3rem; margin-bottom: 0.75rem; }
+
+    /* TOAST */
+    .toast { position: fixed; bottom: 2rem; right: 2rem; background: #0b1120; color: white; padding: 1rem 1.5rem; border-radius: 0.75rem; font-weight: 500; box-shadow: 0 8px 32px rgba(0,0,0,0.2); transform: translateY(100px); opacity: 0; transition: all 0.3s; z-index: 1000; max-width: 90vw; }
+    .toast.show { transform: translateY(0); opacity: 1; }
+
+    .hidden { display: none !important; }
+
+    /* IMAGE SIZE WARNING */
+    .size-warning { color: #ef4444; font-size: 0.8rem; margin-top: 0.5rem; display: none; }
+
+    @media (max-width: 768px) {
+      .admin-layout { flex-direction: column; }
+      .admin-sidebar { width: 100%; padding: 1rem; }
+      .form-row { grid-template-columns: 1fr; }
+      .admin-main { padding: 1.5rem; }
+      .article-item { flex-direction: column; align-items: start; }
+      .article-item .actions { align-self: flex-end; }
+    }
+
+    .admin-header-bar { display: flex; justify-content: space-between; align-items: start; flex-wrap: wrap; gap: 1rem; margin-bottom: 2rem; }
+    .preview-section { margin-top: 2rem; padding: 1.5rem; background: #fafbfc; border-radius: 0.75rem; border: 1px solid #e2e8f0; }
+    .preview-section h4 { font-size: 0.85rem; font-weight: 600; color: #8898aa; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 1rem; }
+  </style>
+</head>
+<body>
+  <!-- LOGIN -->
+  <div class="login-page" id="loginPage">
+    <div class="login-box">
+      <h1>CSECJF Admin</h1>
+      <p>Connectez-vous pour gérer le blog</p>
+      <input type="password" id="loginPassword" placeholder="Mot de passe" onkeydown="if(event.key==='Enter')checkLogin()">
+      <button onclick="checkLogin()">Se connecter</button>
+      <p class="login-error" id="loginError">Mot de passe incorrect</p>
+    </div>
+  </div>
+
+  <!-- ADMIN -->
+  <div class="admin-layout hidden" id="adminApp">
+    <aside class="admin-sidebar">
+      <h2><img src="/static/image/shared/Logo-csecjf.png" alt="" style="height:1.5rem;width:auto;border-radius:4px;"> CSECJF</h2>
+      <a href="#" class="active" onclick="showSection('articles');return false"><span class="material-symbols-outlined">article</span>Articles</a>
+      <a href="blog.html" target="_blank"><span class="material-symbols-outlined">visibility</span>Voir le blog</a>
+      <a href="index.html" target="_blank"><span class="material-symbols-outlined">home</span>Retour au site</a>
+      <div class="spacer"></div>
+      <button class="logout-btn" onclick="logout()"><span class="material-symbols-outlined">logout</span>Déconnexion</button>
+    </aside>
+
+    <main class="admin-main">
+      <!-- SECTION ARTICLES -->
+      <div id="sectionArticles">
+        <div class="admin-header-bar">
+          <div>
+            <h1>Articles du blog</h1>
+            <p class="page-desc" style="margin-bottom:0;">Créez et gérez vos articles facilement.</p>
+          </div>
+          <button class="btn btn-primary" onclick="showForm()" id="btnNew">
+            <span class="material-symbols-outlined">add</span> Nouvel article
+          </button>
+        </div>
+
+        <div class="admin-card" id="listCard">
+          <h3>Tous les articles</h3>
+          <div id="articleList"></div>
+        </div>
+
+        <div class="admin-card hidden" id="formCard">
+          <h3 id="formTitle">Nouvel article</h3>
+          <form id="articleForm" onsubmit="saveArticle(event)">
+            <input type="hidden" id="editId" value="">
+            <div class="form-row">
+              <div class="form-group">
+                <label>Titre de l'article</label>
+                <input type="text" id="fTitle" placeholder="Ex: Partenariat avec SIMPLON SÉNÉGAL" required>
+              </div>
+              <div class="form-group">
+                <label>Catégorie</label>
+                <select id="fCategory">
+                  <option value="Accompagnement">Accompagnement</option>
+                  <option value="Partenariat">Partenariat</option>
+                  <option value="Formation">Formation</option>
+                  <option value="Événement">Événement</option>
+                  <option value="Communauté">Communauté</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label>Date</label>
+                <input type="text" id="fDate" placeholder="Ex: Mai 2026">
+              </div>
+              <div class="form-group">
+                <label>Sous-titre</label>
+                <input type="text" id="fSubtitle" placeholder="Ex: Le numérique au service de la jeunesse">
+              </div>
+            </div>
+            <div class="form-group">
+              <label>Contenu de l'article</label>
+              <div class="editor-toolbar">
+                <button type="button" onclick="execCmd('bold')" title="Gras"><strong>B</strong></button>
+                <button type="button" onclick="execCmd('italic')" title="Italique"><em>I</em></button>
+                <button type="button" onclick="execCmd('underline')" title="Souligné"><u>U</u></button>
+                <div class="sep"></div>
+                <button type="button" onclick="execCmd('insertUnorderedList')" title="Liste à puces"><span class="material-symbols-outlined" style="font-size:1.1rem;">format_list_bulleted</span></button>
+                <button type="button" onclick="execCmd('insertOrderedList')" title="Liste numérotée"><span class="material-symbols-outlined" style="font-size:1.1rem;">format_list_numbered</span></button>
+                <div class="sep"></div>
+                <button type="button" onclick="execCmd('formatBlock','<h3>')" title="Titre section">Titre</button>
+                <button type="button" onclick="execCmd('formatBlock','<p>')" title="Paragraphe">P</button>
+                <div class="sep"></div>
+                <button type="button" onclick="insertLink()" title="Lien"><span class="material-symbols-outlined" style="font-size:1.1rem;">link</span></button>
+              </div>
+              <div id="richEditor" contenteditable="true"></div>
+            </div>
+            <div class="form-group">
+              <label>Images</label>
+              <div class="img-dropzone" id="dropzone" onclick="document.getElementById('fileInput').click()">
+                <div class="icon"><span class="material-symbols-outlined" style="font-size:2.5rem;">add_photo_alternate</span></div>
+                <p>Cliquez ici pour choisir des images depuis votre ordinateur</p>
+              </div>
+              <input type="file" id="fileInput" accept="image/*" multiple style="display:none" onchange="handleFiles(this.files)">
+              <p class="size-warning" id="sizeWarning">Certaines images sont volumineuses. Privilégiez des fichiers de moins de 500 Ko.</p>
+              <div class="img-grid" id="imageGrid"></div>
+              <p style="font-size:0.8rem;color:#8898aa;margin-top:0.5rem;">
+                <span class="material-symbols-outlined" style="font-size:0.9rem;vertical-align:middle;">info</span>
+                Les images sont stockées dans le navigateur. Évitez les fichiers trop lourds.
+              </p>
+            </div>
+            <div style="display:flex;gap:0.75rem;flex-wrap:wrap;">
+              <button type="submit" class="btn btn-primary" id="btnSave">Publier l'article</button>
+              <button type="button" class="btn btn-outline" onclick="cancelForm()">Annuler</button>
+              <button type="button" class="btn btn-outline" onclick="previewArticle()">Aperçu</button>
+            </div>
+          </form>
+        </div>
+
+        <div class="hidden" id="previewBlock">
+          <div class="preview-section">
+            <h4>Aperçu de l'article</h4>
+            <div id="previewContent"></div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+<script>
+  const STORAGE_KEY = 'csecjf_blog_articles';
+  let images = [];
+
+  /* AUTH */
+  function checkLogin() {
+    const pwd = document.getElementById('loginPassword').value;
+    if (pwd === 'csecjf2026') {
+      sessionStorage.setItem('csecjf_admin', '1');
+      document.getElementById('loginPage').classList.add('hidden');
+      document.getElementById('adminApp').classList.remove('hidden');
+      init();
+    } else {
+      document.getElementById('loginError').style.display = 'block';
+    }
+  }
+  function logout() {
+    sessionStorage.removeItem('csecjf_admin');
+    document.getElementById('adminApp').classList.add('hidden');
+    document.getElementById('loginPage').classList.remove('hidden');
+    document.getElementById('loginPassword').value = '';
+    document.getElementById('loginError').style.display = 'none';
+  }
+  (function() {
+    if (sessionStorage.getItem('csecjf_admin') === '1') {
+      document.getElementById('loginPage').classList.add('hidden');
+      document.getElementById('adminApp').classList.remove('hidden');
+      document.addEventListener('DOMContentLoaded', init);
+    }
+  })();
+
+  /* ARTICLES */
+  function getArticles() {
+    try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || []; } catch { return []; }
+  }
+  function saveArticles(a) {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(a));
+  }
+
+  function seedDefaultArticles() {
+    const articles = getArticles();
+    if (articles.length > 0) return;
+    saveArticles([
+      {
+        id: 'default-1',
+        title: "Accompagnement des personnes vivant avec un handicap à Guinaw Rails Sud",
+        category: "Accompagnement",
+        date: "Mai 2026",
+        subtitle: "Un engagement concret pour l'inclusion sociale et l'autonomisation",
+        content: `<p>Le Centre Socio-Éducatif et Culturel de Guinaw Rails Sud poursuit son engagement en faveur de l'inclusion sociale à travers un accompagnement technique et administratif de l'<strong>Association des Personnes Vivant avec un Handicap de Guinaw Rails Sud</strong>.</p>
+<p>Dans cette dynamique, plusieurs actions ont été menées afin de renforcer les capacités de l'association et améliorer les conditions de vie des bénéficiaires. Le centre a notamment assuré la rédaction de divers documents administratifs ainsi que des demandes de partenariat destinées à soutenir les initiatives sociales de l'association.</p>
+<h3>Partenariat avec « Les Petites Gouttes »</h3>
+<p>Parmi les actions majeures réalisées figure le partenariat avec l'organisation <strong>« Les Petites Gouttes »</strong> pour la distribution de produits de protection destinés aux albinos du département de Pikine. Grâce à cette collaboration, une cérémonie officielle de remise symbolique a été organisée après plusieurs mois de travail et de coordination.</p>
+<p>Aujourd'hui, l'Association des Personnes Vivant avec un Handicap de Guinaw Rails Sud est devenue le <strong>distributeur officiel</strong> de ces produits dans la zone de Pikine. Un stock est désormais disponible directement au Centre Socio-Éducatif et Culturel, facilitant ainsi l'accès aux crèmes solaires, lunettes, casquettes et autres équipements essentiels pour les albinos.</p>
+<h3>Don de machines à coudre</h3>
+<p>Dans le cadre du renforcement de l'autonomisation économique des jeunes et des femmes, le partenaire <strong>« Le Temps de l'Aumône »</strong> a également offert une dizaine de machines à coudre au centre de formation en couture du CSEC/GRS. Ce don contribue au développement des formations professionnelles et à l'insertion socio-économique des apprenants.</p>
+<p>À travers ces initiatives, le Centre Socio-Éducatif et Culturel de Guinaw Rails Sud confirme sa volonté de promouvoir une société plus inclusive, solidaire et accessible à tous.</p>`,
+        images: [
+          { name: "activitéscsecjf.jpeg", data: "image/blog/activitéscsecjf.jpeg" },
+          { name: "donscsecjf.jpeg", data: "image/blog/donscsecjf.jpeg" }
+        ]
+      },
+      {
+        id: 'default-2',
+        title: "Partenariat entre le CSEC/GRS et SIMPLON SÉNÉGAL",
+        category: "Partenariat",
+        date: "Mai 2026",
+        subtitle: "Le numérique au service de la jeunesse et de l'inclusion à Guinaw Rails Sud",
+        content: `<p>Dans le cadre de son partenariat stratégique avec <a href="https://simplon.sn" target="_blank" rel="noopener noreferrer" style="color:#04c0ff;font-weight:600;text-decoration:none;">SIMPLON SÉNÉGAL</a>, le Centre Socio-Éducatif et Culturel de Guinaw Rails Sud multiplie les initiatives en faveur de la formation numérique et de l'insertion professionnelle des jeunes et des populations vulnérables.</p>
+<p>Cette collaboration a débuté par la stabilisation et la signature officielle d'une convention de partenariat visant à promouvoir les compétences numériques au sein du département de Pikine. Grâce à cette convention, la <strong>Fabrique de Pikine</strong> a été installée au sein du Centre Socio-Éducatif et Culturel afin d'accueillir les formations des programmes Form'Emploi 2 et 3 ainsi que d'autres formations numériques destinées aux jeunes de Guinaw Rails Sud.</p>
+<h3>Résultats du partenariat</h3>
+<p>Les résultats de ce partenariat sont déjà significatifs. Plusieurs catégories de bénéficiaires ont pu accéder à des formations adaptées à leurs besoins :</p>
+<ul>
+<li>30 enfants formés en informatique et programme KIDS</li>
+<li>30 personnes en situation de handicap initiées aux outils informatiques</li>
+<li>11 entrepreneurs locaux formés aux outils collaboratifs et au marketing digital</li>
+<li>Plus de 20 acteurs locaux formés aux compétences numériques fondamentales</li>
+</ul>
+<p>En parallèle, de nombreux jeunes de Guinaw Rails Sud ont bénéficié de formations longues et courtes proposées par SIMPLON dans le cadre de ses programmes dédiés au département de Pikine.</p>
+<h3>Renforcement des capacités de l'équipe du BEL/GRS</h3>
+<p>Le partenariat a également permis le renforcement des capacités des équipes de l'<strong>AER/BEL.GRS</strong> à travers des formations de formateurs en pédagogie active, marketing digital et outils collaboratifs.</p>
+<h3>Participation aux instances de pilotage</h3>
+<p>Au-delà des formations, le Centre participe activement à la gouvernance et au suivi des programmes en prenant part :</p>
+<ul>
+<li>aux réunions d'évaluation des formations avec l'équipe SIMPLON et les partenaires</li>
+<li>aux jurys de sélection et d'entretien des cohortes Form'Emploi 2 et 3</li>
+<li>aux jurys de certification des apprenants</li>
+<li>au comité de sélection des formations courtes en compétences numériques fondamentales et en IA générative</li>
+</ul>
+<p>À travers ce partenariat, le Centre Socio-Éducatif et Culturel de Guinaw Rails Sud réaffirme son ambition de faire du numérique un levier d'inclusion, d'employabilité et de développement local pour la jeunesse de Pikine.</p>`,
+        images: []
+      }
+    ]);
+  }
+
+  function init() {
+    seedDefaultArticles();
+    renderList();
+  }
+
+  function renderList() {
+    const container = document.getElementById('articleList');
+    const articles = getArticles();
+    if (articles.length === 0) {
+      container.innerHTML = '<div class="empty-state"><span class="material-symbols-outlined">newspaper</span><p>Aucun article pour le moment. Cliquez sur "Nouvel article".</p></div>';
+      return;
+    }
+    container.innerHTML = articles.map((a, i) => `
+      <div class="article-item">
+        <div class="info">
+          <h4>${a.title}</h4>
+          <p>${a.category} — ${a.date || 'Date non définie'} ${a.images && a.images.length ? '— ' + a.images.length + ' photo(s)' : ''}</p>
+        </div>
+        <div class="actions">
+          <button class="btn btn-outline btn-sm" onclick="editArticle(${i})">Modifier</button>
+          <button class="btn btn-danger btn-sm" onclick="deleteArticle(${i})">Supprimer</button>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  function showForm() {
+    document.getElementById('formCard').classList.remove('hidden');
+    document.getElementById('btnNew').innerHTML = '<span class="material-symbols-outlined">close</span> Masquer';
+    document.getElementById('btnNew').onclick = cancelForm;
+    document.getElementById('listCard').classList.add('hidden');
+    window.scrollTo({ top: document.getElementById('formCard').offsetTop - 20, behavior: 'smooth' });
+  }
+
+  function cancelForm() {
+    document.getElementById('formCard').classList.add('hidden');
+    document.getElementById('previewBlock').classList.add('hidden');
+    document.getElementById('listCard').classList.remove('hidden');
+    document.getElementById('btnNew').innerHTML = '<span class="material-symbols-outlined">add</span> Nouvel article';
+    document.getElementById('btnNew').onclick = showForm;
+    document.getElementById('articleForm').reset();
+    document.getElementById('richEditor').innerHTML = '';
+    document.getElementById('editId').value = '';
+    images = [];
+    renderImages();
+    document.getElementById('sizeWarning').style.display = 'none';
+  }
+
+  /* RICH EDITOR */
+  function execCmd(cmd, val) {
+    document.getElementById('richEditor').focus();
+    document.execCommand(cmd, false, val || null);
+  }
+  function insertLink() {
+    const url = prompt('Lien URL :', 'https://');
+    if (url) execCmd('createLink', url);
+  }
+
+  function getEditorHTML() {
+    return document.getElementById('richEditor').innerHTML;
+  }
+  function setEditorHTML(html) {
+    document.getElementById('richEditor').innerHTML = html || '';
+  }
+
+  /* IMAGES */
+  function handleFiles(files) {
+    let totalSize = 0;
+    for (const f of files) totalSize += f.size;
+    if (totalSize > 2 * 1024 * 1024) {
+      document.getElementById('sizeWarning').style.display = 'block';
+    } else {
+      document.getElementById('sizeWarning').style.display = 'none';
+    }
+    for (const f of files) {
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        images.push({ name: f.name, data: e.target.result, size: (f.size / 1024).toFixed(0) });
+        renderImages();
+      };
+      reader.readAsDataURL(f);
+    }
+  }
+
+  function removeImage(i) {
+    images.splice(i, 1);
+    renderImages();
+  }
+
+  function renderImages() {
+    const grid = document.getElementById('imageGrid');
+    if (images.length === 0) { grid.innerHTML = ''; return; }
+    grid.innerHTML = images.map((img, i) => `
+      <div class="img-item">
+        <img src="${img.data}" alt="${img.name}">
+        <span class="size">${img.size} Ko</span>
+        <button class="del" onclick="removeImage(${i})">&times;</button>
+      </div>
+    `).join('');
+  }
+
+  /* SAVE */
+  function saveArticle(e) {
+    e.preventDefault();
+    const editId = document.getElementById('editId').value;
+    const content = getEditorHTML().trim();
+    if (!content) { showToast('Veuillez rédiger le contenu de l\'article.'); return; }
+
+    const article = {
+      id: editId || Date.now().toString(),
+      title: document.getElementById('fTitle').value,
+      category: document.getElementById('fCategory').value,
+      date: document.getElementById('fDate').value || new Date().toLocaleDateString('fr-FR', { month: 'long', year: 'numeric' }),
+      subtitle: document.getElementById('fSubtitle').value,
+      content: content,
+      images: images.map(i => ({ name: i.name, data: i.data }))
+    };
+
+    let articles = getArticles();
+    if (editId) {
+      const idx = articles.findIndex(a => a.id === editId);
+      if (idx !== -1) articles[idx] = article;
+      showToast('Article modifié avec succès !');
+    } else {
+      articles.unshift(article);
+      showToast('Article publié avec succès !');
+    }
+    saveArticles(articles);
+    renderList();
+    cancelForm();
+  }
+
+  /* EDIT / DELETE */
+  function editArticle(idx) {
+    const articles = getArticles();
+    const a = articles[idx];
+    if (!a) return;
+    document.getElementById('editId').value = a.id;
+    document.getElementById('fTitle').value = a.title || '';
+    document.getElementById('fCategory').value = a.category || 'Accompagnement';
+    document.getElementById('fDate').value = a.date || '';
+    document.getElementById('fSubtitle').value = a.subtitle || '';
+    setEditorHTML(a.content || '');
+    images = a.images ? a.images.map(i => ({ name: i.name, data: i.data })) : [];
+    renderImages();
+    showForm();
+    document.getElementById('formTitle').textContent = 'Modifier l\'article';
+    document.getElementById('btnSave').textContent = 'Enregistrer';
+  }
+
+  function deleteArticle(idx) {
+    if (!confirm('Supprimer cet article définitivement ?')) return;
+    let articles = getArticles();
+    articles.splice(idx, 1);
+    saveArticles(articles);
+    renderList();
+    showToast('Article supprimé.');
+  }
+
+  /* PREVIEW */
+  function previewArticle() {
+    const content = getEditorHTML().trim();
+    if (!content) { showToast('Écrivez d\'abord du contenu.'); return; }
+    const preview = document.getElementById('previewContent');
+    const title = document.getElementById('fTitle').value || 'Sans titre';
+    const cat = document.getElementById('fCategory').value;
+    const date = document.getElementById('fDate').value || '';
+    const sub = document.getElementById('fSubtitle').value;
+    const imgs = images.map(i => `<div style="border-radius:0.75rem;overflow:hidden;box-shadow:0 8px 28px -6px rgba(0,74,173,.13);margin-top:1rem;"><img src="${i.data}" alt="" style="width:100%;height:auto;display:block;"></div>`).join('');
+
+    preview.innerHTML = `
+      <div style="max-width:800px;">
+        <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:1rem;">
+          <span style="background:#04c0ff;color:white;font-size:0.75rem;font-weight:700;padding:0.25rem 0.75rem;border-radius:9999px;">${cat}</span>
+          <span style="color:#8898aa;font-size:0.875rem;">${date}</span>
+        </div>
+        <h2 style="font-size:1.5rem;font-weight:800;font-family:'Plus Jakarta Sans',sans-serif;color:#0b1120;margin-bottom:0.5rem;">${title}</h2>
+        ${sub ? `<p style="color:#04c0ff;font-weight:600;font-size:0.875rem;text-transform:uppercase;margin-bottom:1rem;">${sub}</p>` : ''}
+        <div style="color:#52637a;line-height:1.8;">${content}</div>
+        ${imgs}
+      </div>
+    `;
+    document.getElementById('previewBlock').classList.remove('hidden');
+    preview.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  /* TOAST */
+  function showToast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    clearTimeout(t._timer);
+    t._timer = setTimeout(() => t.classList.remove('show'), 3000);
+  }
+</script>
+</body>
+</html>

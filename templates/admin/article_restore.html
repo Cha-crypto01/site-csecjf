@@ -1,0 +1,25 @@
+{% extends "admin/base.html" %}{% load static %}
+{% block title %}Restaurer — {{ article.title }}{% endblock %}
+{% block page_title %}Confirmer la restauration{% endblock %}
+{% block breadcrumb %}<a href="{% url 'admin_dashboard' %}">Dashboard</a> / <a href="{% url 'article_list' %}">Articles</a> / Restaurer{% endblock %}
+
+{% block content %}
+<div class="card" style="max-width: 500px; margin: 0 auto; text-align: center;">
+  <span class="material-symbols-outlined" style="font-size: 3rem; color: #10b981; margin-bottom: 1rem;">restore_from_trash</span>
+  <h2 style="margin-bottom: 0.5rem;">Restaurer l'article</h2>
+  <p class="text-muted" style="margin-bottom: 1.5rem;">
+    Voulez-vous restaurer l'article <strong>{{ article.title }}</strong> ?
+    Il sera de nouveau visible dans l'interface d'administration.
+  </p>
+
+  <form method="post">
+    {% csrf_token %}
+    <div class="form-actions" style="justify-content: center;">
+      <button type="submit" class="btn btn-success">
+        <span class="material-symbols-outlined">restore</span> Oui, restaurer
+      </button>
+      <a href="{% url 'article_list' %}" class="btn btn-outline">Annuler</a>
+    </div>
+  </form>
+</div>
+{% endblock %}

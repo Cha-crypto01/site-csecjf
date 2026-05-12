@@ -1,0 +1,117 @@
+{% extends "admin/base.html" %}{% load static %}
+{% block title %}Ajouter une image — CSECJF Admin{% endblock %}
+{% block page_title %}Ajouter une image à la galerie{% endblock %}
+{% block breadcrumb %}<a href="{% url 'admin_dashboard' %}">Dashboard</a> / <a href="{% url 'gallery_list' %}">Galerie</a> / Ajouter{% endblock %}
+
+{% block extra_head %}
+<style>
+  .upload-zone {
+    border: 2px dashed #e2e8f0;
+    border-radius: 0.75rem;
+    padding: 2.5rem 2rem;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    background: #fafbfc;
+  }
+  .upload-zone:hover {
+    border-color: #04c0ff;
+    background: #f0f9ff;
+  }
+  .upload-zone .icon {
+    font-size: 3rem;
+    color: #04c0ff;
+    display: block;
+    margin-bottom: 0.75rem;
+  }
+  .upload-zone p {
+    color: #64748b;
+    font-size: 0.9rem;
+    margin-bottom: 0.25rem;
+  }
+  .upload-zone .hint {
+    color: #94a3b8;
+    font-size: 0.8rem;
+  }
+  #preview-image {
+    max-width: 100%;
+    max-height: 200px;
+    border-radius: 0.5rem;
+    margin-top: 0.75rem;
+    display: none;
+    object-fit: cover;
+  }
+  #file-name {
+    font-size: 0.85rem;
+    color: #0b1120;
+    font-weight: 600;
+    margin-top: 0.5rem;
+    display: none;
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="card" style="max-width: 500px;">
+  <form method="post" enctype="multipart/form-data" id="upload-form">
+    {% csrf_token %}
+
+    <div class="form-group">
+      <label>Image</label>
+      <div class="upload-zone" id="upload-zone" onclick="document.getElementById('file-input').click()">
+        <span class="icon material-symbols-outlined">add_photo_alternate</span>
+        <p>Cliquez ici pour choisir une image</p>
+        <span class="hint">JPG, PNG, GIF, WebP</span>
+        <img id="preview-image" alt="Aperçu">
+        <div id="file-name"></div>
+      </div>
+      <input type="file" name="image" id="file-input" accept="image/*" required style="display:none">
+    </div>
+
+    <div class="form-group">
+      <label for="id_caption">Légende</label>
+      <input type="text" name="caption" id="id_caption" maxlength="255" class="form-input" placeholder="Ex: Formation numérique session 2026">
+    </div>
+
+    <div class="form-group">
+      <label for="id_category">Catégorie</label>
+      <select name="category" id="id_category" class="form-input">
+        <option value="activites">Activités</option>
+        <option value="formations">Formations</option>
+        <option value="infrastructures">Infrastructures</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="id_order">Ordre d'affichage</label>
+      <input type="number" name="order" id="id_order" value="0" min="0" class="form-input">
+      <div class="help-text">Les images avec un ordre faible apparaissent en premier.</div>
+    </div>
+
+    <div class="form-actions">
+      <button type="submit" class="btn btn-primary">
+        <span class="material-symbols-outlined">upload</span> Ajouter l'image
+      </button>
+      <a href="{% url 'gallery_list' %}" class="btn btn-outline">Annuler</a>
+    </div>
+  </form>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+  document.getElementById('file-input').addEventListener('change', function(e) {
+    var file = e.target.files[0];
+    if (!file) return;
+    var reader = new FileReader();
+    reader.onload = function(ev) {
+      var preview = document.getElementById('preview-image');
+      preview.src = ev.target.result;
+      preview.style.display = 'block';
+      document.getElementById('file-name').textContent = file.name;
+      document.getElementById('file-name').style.display = 'block';
+    };
+    reader.readAsDataURL(file);
+  });
+</script>
+{% endblock %}

@@ -1,0 +1,26 @@
+{% extends "admin/base.html" %}{% load static %}
+{% block title %}Désactiver — {{ user_obj.username }}{% endblock %}
+{% block page_title %}Confirmer la désactivation{% endblock %}
+{% block breadcrumb %}<a href="{% url 'admin_dashboard' %}">Dashboard</a> / <a href="{% url 'user_list' %}">Utilisateurs</a> / Désactiver{% endblock %}
+
+{% block content %}
+<div class="card" style="max-width: 500px; margin: 0 auto; text-align: center;">
+  <span class="material-symbols-outlined" style="font-size: 3rem; color: #ef4444; margin-bottom: 1rem;">person_off</span>
+  <h2 style="margin-bottom: 0.5rem;">Désactiver l'utilisateur</h2>
+  <p class="text-muted" style="margin-bottom: 1.5rem;">
+    Vous êtes sur le point de désactiver <strong>{{ user_obj.get_full_name|default:user_obj.username }}</strong>
+    ({{ user_obj.get_role_display }}). L'utilisateur ne pourra plus se connecter.
+    Cette action est réversible.
+  </p>
+
+  <form method="post">
+    {% csrf_token %}
+    <div class="form-actions" style="justify-content: center;">
+      <button type="submit" class="btn btn-danger">
+        <span class="material-symbols-outlined">person_off</span> Oui, désactiver
+      </button>
+      <a href="{% url 'user_list' %}" class="btn btn-outline">Annuler</a>
+    </div>
+  </form>
+</div>
+{% endblock %}

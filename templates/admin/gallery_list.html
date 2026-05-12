@@ -1,0 +1,48 @@
+{% extends "admin/base.html" %}{% load static %}
+{% block title %}Galerie — CSECJF Admin{% endblock %}
+{% block page_title %}Gestion de la galerie photo{% endblock %}
+{% block breadcrumb %}<a href="{% url 'admin_dashboard' %}">Dashboard</a> / Galerie{% endblock %}
+{% block header_actions %}
+<a href="{% url 'gallery_add' %}" class="btn btn-primary">
+  <span class="material-symbols-outlined">add_photo_alternate</span> Ajouter une image
+</a>
+{% endblock %}
+
+{% block content %}
+<div class="card">
+  {% if images %}
+  <table>
+    <thead>
+      <tr>
+        <th>Aperçu</th>
+        <th>Légende</th>
+        <th>Catégorie</th>
+        <th>Ordre</th>
+        <th>Date</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for img in images %}
+      <tr>
+        <td><img src="{{ img.image.url }}" alt="{{ img.caption }}" style="width:80px;height:56px;object-fit:cover;border-radius:6px;"></td>
+        <td>{{ img.caption|default:"—" }}</td>
+        <td><span class="badge badge-info">{{ img.get_category_display }}</span></td>
+        <td>{{ img.order }}</td>
+        <td class="text-muted text-sm">{{ img.created_at|date:"d/m/Y" }}</td>
+        <td>
+          <a href="{% url 'gallery_delete' img.pk %}" class="btn btn-danger btn-sm">Supprimer</a>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+  <div class="empty-state">
+    <span class="icon material-symbols-outlined">photo_library</span>
+    <p>Aucune image dans la galerie.</p>
+    <a href="{% url 'gallery_add' %}" class="btn btn-primary mt-1">Ajouter la première image</a>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

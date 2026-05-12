@@ -1,0 +1,200 @@
+{% extends "admin/base.html" %}{% load static %}
+{% block title %}{% if editing %}Modifier{% else %}Nouvel{% endif %} article — CSECJF Admin{% endblock %}
+{% block page_title %}{% if editing %}Modifier l'article{% else %}Nouvel article{% endif %}{% endblock %}
+{% block breadcrumb %}<a href="{% url 'admin_dashboard' %}">Dashboard</a> / <a href="{% url 'article_list' %}">Articles</a> / {% if editing %}Modifier{% else %}Nouveau{% endif %}{% endblock %}
+
+{% block extra_head %}
+<style>
+  .editor-toolbar { display: flex; gap: 0.25rem; padding: 0.5rem; background: #f8fafc; border: 1.5px solid #e2e8f0; border-bottom: none; border-radius: 0.5rem 0.5rem 0 0; flex-wrap: wrap; }
+  .editor-toolbar button { padding: 0.35rem 0.6rem; border: none; background: transparent; border-radius: 0.3rem; cursor: pointer; font-size: 0.85rem; color: #475569; transition: all 0.15s; font-family: 'DM Sans', sans-serif; }
+  .editor-toolbar button:hover { background: #e2e8f0; color: #0b1120; }
+  #editor { min-height: 300px; padding: 1rem; border: 1.5px solid #e2e8f0; border-radius: 0 0 0.5rem 0.5rem; font-size: 0.95rem; line-height: 1.7; outline: none; overflow-y: auto; background: white; }
+  #editor:focus { border-color: #04c0ff; }
+  #editor h1 { font-size: 1.5rem; font-weight: 700; margin: 1rem 0 0.5rem; }
+  #editor h2 { font-size: 1.25rem; font-weight: 700; margin: 0.75rem 0 0.5rem; }
+  #editor h3 { font-size: 1.1rem; font-weight: 600; margin: 0.75rem 0 0.5rem; }
+  #editor p { margin: 0.5rem 0; }
+  #editor ul, #editor ol { padding-left: 1.5rem; margin: 0.5rem 0; }
+  #editor blockquote { border-left: 3px solid #04c0ff; padding-left: 1rem; color: #64748b; margin: 0.75rem 0; }
+  #editor a { color: #04c0ff; }
+  #editor img { max-width: 100%; border-radius: 0.5rem; margin: 0.75rem 0; }
+  .image-list { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.5rem; }
+  .image-item { position: relative; width: 100px; height: 100px; border-radius: 0.5rem; overflow: hidden; border: 1.5px solid #e2e8f0; }
+  .image-item img { width: 100%; height: 100%; object-fit: cover; }
+  .image-item .remove-image { position: absolute; top: 2px; right: 2px; width: 22px; height: 22px; border-radius: 50%; background: rgba(239,68,68,0.9); color: white; border: none; cursor: pointer; font-size: 14px; display: flex; align-items: center; justify-content: center; }
+  .image-upload-area { border: 2px dashed #e2e8f0; border-radius: 0.75rem; padding: 2rem; text-align: center; cursor: pointer; transition: all 0.2s; margin-top: 0.5rem; }
+  .image-upload-area:hover { border-color: #04c0ff; background: #f0f9ff; }
+  .image-upload-area .icon { font-size: 2rem; color: #94a3b8; }
+  .image-upload-area p { color: #64748b; font-size: 0.85rem; margin-top: 0.5rem; }
+  #image-input { display: none; }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="card">
+  <form method="post" id="article-form">
+    {% csrf_token %}
+    {{ form.content }}
+    {{ form.images }}
+
+    {% if form.non_field_errors %}
+    <div class="form-group">
+      {% for error in form.non_field_errors %}
+      <div class="errorlist">{{ error }}</div>
+      {% endfor %}
+    </div>
+    {% endif %}
+
+    <div class="form-group">
+      <label for="id_title">{{ form.title.label }}</label>
+      {{ form.title }}
+      {% if form.title.errors %}<div class="errorlist">{{ form.title.errors }}</div>{% endif %}
+    </div>
+
+    <div class="form-group">
+      <label for="id_subtitle">{{ form.subtitle.label }}</label>
+      {{ form.subtitle }}
+      {% if form.subtitle.errors %}<div class="errorlist">{{ form.subtitle.errors }}</div>{% endif %}
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
+      <div class="form-group">
+        <label for="id_category">{{ form.category.label }}</label>
+        {{ form.category }}
+        {% if form.category.errors %}<div class="errorlist">{{ form.category.errors }}</div>{% endif %}
+      </div>
+      <div class="form-group">
+        <label for="id_status">{{ form.status.label }}</label>
+        {{ form.status }}
+        {% if form.status.errors %}<div class="errorlist">{{ form.status.errors }}</div>{% endif %}
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label>Contenu</label>
+      <div class="editor-toolbar">
+        <button type="button" data-cmd="bold" title="Gras"><strong>B</strong></button>
+        <button type="button" data-cmd="italic" title="Italique"><em>I</em></button>
+        <button type="button" data-cmd="underline" title="Souligné"><u>U</u></button>
+        <button type="button" data-cmd="strikeThrough" title="Barré"><s>S</s></button>
+        <span style="width:1px;background:#e2e8f0;margin:0 0.25rem;"></span>
+        <button type="button" data-cmd="formatBlock" data-val="h2" title="Titre H2">H2</button>
+        <button type="button" data-cmd="formatBlock" data-val="h3" title="Titre H3">H3</button>
+        <button type="button" data-cmd="formatBlock" data-val="p" title="Paragraphe">¶</button>
+        <span style="width:1px;background:#e2e8f0;margin:0 0.25rem;"></span>
+        <button type="button" data-cmd="insertUnorderedList" title="Liste à puces">• Liste</button>
+        <button type="button" data-cmd="insertOrderedList" title="Liste numérotée">1. Liste</button>
+        <span style="width:1px;background:#e2e8f0;margin:0 0.25rem;"></span>
+        <button type="button" data-cmd="createLink" title="Lien">🔗</button>
+        <button type="button" data-cmd="insertHTML" data-val='<blockquote>Citation</blockquote>' title="Citation">❝</button>
+        <button type="button" data-cmd="insertImage" title="Image">🖼</button>
+      </div>
+      <div id="editor" contenteditable="true">{{ form.content.value|default:""|safe }}</div>
+    </div>
+
+    <div class="form-group">
+      <label>Images</label>
+      <div class="image-list" id="image-list"></div>
+      <div class="image-upload-area" id="image-upload-area">
+        <span class="icon material-symbols-outlined">add_photo_alternate</span>
+        <p>Cliquez pour ajouter des images (base64)</p>
+      </div>
+      <input type="file" id="image-input" accept="image/*" multiple>
+    </div>
+
+    <div class="form-actions">
+      <button type="submit" class="btn btn-primary">
+        {% if editing %}Enregistrer les modifications{% else %}Créer l'article{% endif %}
+      </button>
+      <a href="{% url 'article_list' %}" class="btn btn-outline">Annuler</a>
+    </div>
+  </form>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+(function() {
+  const editor = document.getElementById('editor');
+  const contentField = document.getElementById('id_content');
+  const imagesField = document.getElementById('id_images');
+  const imageList = document.getElementById('image-list');
+  const imageInput = document.getElementById('image-input');
+  const uploadArea = document.getElementById('image-upload-area');
+
+  let images = [];
+
+  // Initialize images from existing data
+  try {
+    const existing = JSON.parse(imagesField.value || '[]');
+    if (Array.isArray(existing)) images = existing;
+  } catch(e) {}
+
+  // Toolbar commands
+  document.querySelectorAll('.editor-toolbar button[data-cmd]').forEach(btn => {
+    btn.addEventListener('click', function() {
+      const cmd = this.dataset.cmd;
+      const val = this.dataset.val || null;
+      if (cmd === 'createLink') {
+        const url = prompt('URL du lien :');
+        if (url) document.execCommand(cmd, false, url);
+      } else if (cmd === 'insertImage') {
+        imageInput.click();
+      } else {
+        document.execCommand(cmd, false, val);
+      }
+      editor.focus();
+    });
+  });
+
+  // Sync editor content to hidden field before submit
+  document.getElementById('article-form').addEventListener('submit', function() {
+    contentField.value = editor.innerHTML;
+    imagesField.value = JSON.stringify(images);
+  });
+
+  // Load editor content from hidden field on page load
+  if (contentField.value) {
+    editor.innerHTML = contentField.value;
+  }
+
+  // Image upload
+  uploadArea.addEventListener('click', () => imageInput.click());
+
+  imageInput.addEventListener('change', function() {
+    Array.from(this.files).forEach(file => {
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        const dataUrl = e.target.result;
+        const name = file.name;
+        images.push({name, data: dataUrl});
+        renderImages();
+        // Insert into editor
+        document.execCommand('insertImage', false, dataUrl);
+      };
+      reader.readAsDataURL(file);
+    });
+    this.value = '';
+  });
+
+  function renderImages() {
+    imageList.innerHTML = images.map((img, i) =>
+      `<div class="image-item">
+        <img src="${img.data}" alt="${img.name}">
+        <button type="button" class="remove-image" data-index="${i}">×</button>
+      </div>`
+    ).join('');
+
+    document.querySelectorAll('.remove-image').forEach(btn => {
+      btn.addEventListener('click', function() {
+        const idx = parseInt(this.dataset.index);
+        images.splice(idx, 1);
+        renderImages();
+      });
+    });
+  }
+
+  renderImages();
+})();
+</script>
+{% endblock %}

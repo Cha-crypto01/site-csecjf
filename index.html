@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CSECJF - Centre Socio-Éducatif Culturel des Jeunes et des Femmes | Guinaw Rails Sud</title>
+  <meta name="description" content="Le CSECJF de Guinaw Rails Sud œuvre pour l'éducation, la formation professionnelle et le développement économique local à Dakar, Sénégal.">
+  <meta property="og:title" content="CSECJF - Centre Socio-Éducatif Guinaw Rails Sud">
+  <meta property="og:description" content="Formation, entrepreneuriat et inclusion sociale pour les jeunes et femmes de Guinaw Rails Sud, Dakar.">
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="fr_SN">
+  <link rel="icon" type="image/png" sizes="32x32" href="/static/image/accueil/favicon-csecjf.png">
+  <!-- Preconnect pour accélérer le chargement des polices -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <!-- Polices fusionnées en un seul appel -->
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=DM+Sans:wght@300;400;500;600&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+  <link href="/static/css/main.css" rel="stylesheet">
+</head>
+<body>
+  <!-- Header Navigation -->
+   <div id="heroCarousel">
+      <section id="hero" style="height: 100vh; background: #0b2e53; display: flex; align-items: center; color: white; position: relative; overflow: hidden;">
+        <div id="heroSlideshow" style="position: absolute; inset: 0;">
+          <div class="hero-slide active" style="position: absolute; inset: 0;">
+            <img src="/static/image/accueil/Centre Socio-Educatif.jpeg" alt="Centre Socio-Éducatif" style="width: 100%; height: 100%; object-fit: cover;" loading="lazy">
+          </div>
+          <div class="hero-slide" style="position: absolute; inset: 0;">
+            <img src="/static/image/accueil/Bureau Economique Local.jpeg" alt="BEL" style="width: 100%; height: 100%; object-fit: cover;" loading="lazy">
+          </div>
+          <div class="hero-slide" style="position: absolute; inset: 0;">
+            <img src="/static/image/accueil/Salle de réunion.jpeg" alt="Salle de réunion" style="width: 100%; height: 100%; object-fit: cover;" loading="lazy">
+          </div>
+        </div>
+        <div style="position: relative; z-index: 2; max-width: 1200px; margin: 0 auto; padding: 2rem; text-align: center;">
+          <h1 style="font-size: 3.5rem; font-weight: 800; margin-bottom: 1rem; font-family: 'Public Sans', sans-serif; line-height: 1.2;">Centre Socio-Éducatif<br>de Guinaw Rails Sud</h1>
+          <p style="font-size: 1.25rem; color: rgba(255,255,255,0.85); margin-bottom: 2rem; max-width: 36rem; margin-left: auto; margin-right: auto;">Former, autonomiser, bâtir — un centre au service de la communauté pour un avenir durable.</p>
+          <div style="display: flex; gap: 1rem; justify-content: center;">
+            <a href="about.html" class="cta-button">Découvrir le centre</a>
+            <a href="services.html" class="btn btn-secondary" style="border: 2px solid white; color: white; background: transparent;">Nos services</a>
+          </div>
+        </div>
+        <!-- Hero Navigation Dots -->
+        <div style="position: absolute; bottom: 2rem; left: 50%; transform: translateX(-50%); z-index: 3; display: flex; gap: 0.75rem;">
+          <button class="hero-dot active" data-slide="0" style="width: 12px; height: 12px; border-radius: 50%; border: 2px solid white; background: white; cursor: pointer; padding: 0; transition: all 0.3s;"></button>
+          <button class="hero-dot" data-slide="1" style="width: 12px; height: 12px; border-radius: 50%; border: 2px solid white; background: transparent; cursor: pointer; padding: 0; transition: all 0.3s;"></button>
+          <button class="hero-dot" data-slide="2" style="width: 12px; height: 12px; border-radius: 50%; border: 2px solid white; background: transparent; cursor: pointer; padding: 0; transition: all 0.3s;"></button>
+        </div>
+      </section>
+    </div>
+
+  <main>
+    <!-- Brief Presentation -->
+    <section style="padding: 5rem 2rem;">
+      <div class="container">
+        <div class="grid grid-2" style="gap: 4rem;">
+          <div>
+            <div style="aspect-ratio: 1; border-radius: 1rem; overflow: hidden; box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);">
+              <img alt="Centre Socio-Éducatif de Guinaw Rails Sud" src="/static/image/accueil/Centre Socio-Educatif.jpeg" style="width: 100%; height: 100%; object-fit: cover;" loading="lazy">
+            </div>
+          </div>
+          <div>
+            <h2 class="section-title">Un ancrage pour l'avenir</h2>
+            <p style="color: #565f67; font-size: 1rem; line-height: 1.6; margin-bottom: 1.5rem;">
+              Le CSECJF est bien plus qu'un simple bâtiment. C'est un catalyseur de changement social et économique. Nous œuvrons quotidiennement pour offrir aux jeunes et aux femmes de Guinaw Rails Sud les outils nécessaires à leur épanouissement.
+            </p>
+            <div style="display: flex; flex-direction: column; gap: 1rem; margin-bottom: 2rem;">
+              <div style="display: flex; gap: 1rem;">
+                <span class="material-symbols-outlined" style="color: #04c0ff;">check_circle</span>
+                <p style="color: #424752; font-weight: 500;">Inclusion sociale et éducation pour tous</p>
+              </div>
+              <div style="display: flex; gap: 1rem;">
+                <span class="material-symbols-outlined" style="color: #04c0ff;">check_circle</span>
+                <p style="color: #424752; font-weight: 500;">Accompagnement vers l'emploi local</p>
+              </div>
+              <div style="display: flex; gap: 1rem;">
+                <span class="material-symbols-outlined" style="color: #04c0ff;">check_circle</span>
+                <p style="color: #424752; font-weight: 500;">Promotion de la culture et du civisme</p>
+              </div>
+            </div>
+            <a href="about.html" class="cta-button">En savoir plus</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Strategic Axes Section -->
+    <section id="services" style="padding: 5rem 2rem; background-color: #f9f8f7;">
+      <div class="container">
+        <div style="text-align: center; margin-bottom: 4rem;">
+          <h2 class="section-title">Nos Axes Stratégiques</h2>
+          <p class="section-subtitle" style="margin: 0 auto;">Une vision structurée pour répondre aux défis de notre communauté.</p>
+        </div>
+        <div class="grid grid-3">
+          <div class="bento-card">
+            <span class="material-symbols-outlined" style="font-size: 2.5rem; color: #04c0ff; display: block; margin-bottom: 1rem;">school</span>
+            <h3 style="font-size: 1.25rem; font-weight: 600; font-family: 'Public Sans', sans-serif; margin-bottom: 1rem;">Éducation & Formation</h3>
+            <p style="color: #565f67; margin-bottom: 1.5rem;">Programmes de renforcement de capacités et formations certifiantes adaptées au marché.</p>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+              <div style="background-color: #f5f4f3; padding: 1rem; border-radius: 0.5rem; text-align: center;">
+                <div style="font-weight: 700; color: #04c0ff; font-size: 1.25rem;">20+</div>
+                <div style="font-size: 0.75rem; color: #727784; text-transform: uppercase; letter-spacing: 0.05em;">Diplômés/an</div>
+              </div>
+              <div style="background-color: #f5f4f3; padding: 1rem; border-radius: 0.5rem; text-align: center;">
+                <div style="font-weight: 700; color: #04c0ff; font-size: 1.25rem;">3</div>
+                <div style="font-size: 0.75rem; color: #727784; text-transform: uppercase; letter-spacing: 0.05em;">Filières</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="bento-card">
+            <span class="material-symbols-outlined" style="font-size: 2.5rem; color: #04c0ff; display: block; margin-bottom: 1rem;">diversity_3</span>
+            <h3 style="font-size: 1.25rem; font-weight: 600; font-family: 'Public Sans', sans-serif; margin-bottom: 1rem;">Inclusion Sociale</h3>
+            <p style="color: #565f67;">Soutien aux groupes vulnérables, alphabétisation et sensibilisation civique.</p>
+          </div>
+
+          <div class="bento-card">
+            <span class="material-symbols-outlined" style="font-size: 2.5rem; color: #04c0ff; display: block; margin-bottom: 1rem;">trending_up</span>
+            <h3 style="font-size: 1.25rem; font-weight: 600; font-family: 'Public Sans', sans-serif; margin-bottom: 1rem;">Économie Locale</h3>
+            <p style="color: #565f67;">Promotion de l'entrepreneuriat et appui au Bureau de l'Économie Locale (BEL).</p>
+          </div>
+
+          <div class="bento-card">
+            <span class="material-symbols-outlined" style="font-size: 2.5rem; color: #04c0ff; display: block; margin-bottom: 1rem;">sports_bar</span>
+            <h3 style="font-size: 1.25rem; font-weight: 600; font-family: 'Public Sans', sans-serif; margin-bottom: 1rem;">Culture & Sport</h3>
+            <p style="color: #565f67;">Un pôle de rayonnement culturel avec des infrastructures modernes pour la jeunesse.</p>
+          </div>
+
+          <div class="bento-card">
+            <span class="material-symbols-outlined" style="font-size: 2.5rem; color: #04c0ff; display: block; margin-bottom: 1rem;">public</span>
+            <h3 style="font-size: 1.25rem; font-weight: 600; font-family: 'Public Sans', sans-serif; margin-bottom: 1rem;">Communauté</h3>
+            <p style="color: #565f67;">Engagement civique et renforcement du tissu social local pour une meilleure cohésion.</p>
+          </div>
+
+          <div class="bento-card">
+            <span class="material-symbols-outlined" style="font-size: 2.5rem; color: #04c0ff; display: block; margin-bottom: 1rem;">data_thresholding</span>
+            <h3 style="font-size: 1.25rem; font-weight: 600; font-family: 'Public Sans', sans-serif; margin-bottom: 1rem;">Innovation Numérique</h3>
+            <p style="color: #565f67;">Transition digitale et acquisition de compétences technologiques pour les futurs emplois.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Services Section -->
+    <section id="services-preview" style="padding: 5rem 2rem;">
+      <div class="container">
+        <div style="text-align: center; margin-bottom: 4rem;">
+          <h2 class="section-title">Nos Services</h2>
+          <p class="section-subtitle" style="margin: 0 auto;">Des solutions concrètes pour la communauté.</p>
+        </div>
+        <div style="text-align: right; margin-bottom: 1.5rem;">
+          <a href="services.html" style="color: #04c0ff; font-weight: 500; display: inline-flex; align-items: center; gap: 0.5rem; text-decoration: none;">
+            Tout voir <span class="material-symbols-outlined">east</span>
+          </a>
+        </div>
+        <div class="grid grid-3">
+          <!-- Card 1: BEL -->
+          <div class="bento-card" style="padding: 0; overflow: hidden;">
+            <div style="height: 12rem; overflow: hidden;">
+              <img alt="Bureau de l'Économie Locale" src="/static/image/accueil/Bureau Economique Local.jpeg" style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s;" loading="lazy">
+            </div>
+            <div style="padding: 2rem;">
+              <div style="background-color: #d8e1ea; color: #004aad; padding: 0.25rem 0.75rem; border-radius: 9999px; font-size: 0.75rem; font-weight: 700; width: fit-content; margin-bottom: 1rem;">BUSINESS</div>
+              <h3 style="font-size: 1.25rem; font-weight: 600; font-family: 'Public Sans', sans-serif; margin-bottom: 0.75rem;">BEL (Bureau de l'Économie Locale)</h3>
+              <p style="color: #565f67; font-size: 0.875rem; margin-bottom: 1.5rem; line-height: 1.6;">Accompagnement technique et stratégique pour les porteurs de projets et entrepreneurs locaux.</p>
+              <a href="services.html#bel" class="btn btn-primary" style="width: 100%; justify-content: center;">Consulter</a>
+            </div>
+          </div>
+          <!-- Card 2: Training School -->
+          <div class="bento-card" style="padding: 0; overflow: hidden;">
+            <div style="height: 12rem; overflow: hidden;">
+              <img alt="École de Formation" src="/static/image/accueil/Ecole de formation.jpeg" style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s;" loading="lazy">
+            </div>
+            <div style="padding: 2rem;">
+              <div style="background-color: #d8e1ea; color: #004aad; padding: 0.25rem 0.75rem; border-radius: 9999px; font-size: 0.75rem; font-weight: 700; width: fit-content; margin-bottom: 1rem;">ÉDUCATION</div>
+              <h3 style="font-size: 1.25rem; font-weight: 600; font-family: 'Public Sans', sans-serif; margin-bottom: 0.75rem;">École de Formation</h3>
+              <p style="color: #565f67; font-size: 0.875rem; margin-bottom: 1.5rem; line-height: 1.6;">Cursus diversifiés : informatique, gestion, couture, et métiers de demain.</p>
+              <a href="services.html#formation" class="btn btn-primary" style="width: 100%; justify-content: center;">S'inscrire</a>
+            </div>
+          </div>
+          <!-- Card 3: Hall Rental -->
+          <div class="bento-card" style="padding: 0; overflow: hidden;">
+            <div style="height: 12rem; overflow: hidden;">
+              <img alt="Salle de réunion" src="/static/image/accueil/Salle de réunion.jpeg" style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s;" loading="lazy">
+            </div>
+            <div style="padding: 2rem;">
+              <div style="background-color: #d8e1ea; color: #004aad; padding: 0.25rem 0.75rem; border-radius: 9999px; font-size: 0.75rem; font-weight: 700; width: fit-content; margin-bottom: 1rem;">LOGISTIQUE</div>
+              <h3 style="font-size: 1.25rem; font-weight: 600; font-family: 'Public Sans', sans-serif; margin-bottom: 0.75rem;">Location de Salles</h3>
+              <p style="color: #565f67; font-size: 0.875rem; margin-bottom: 1.5rem; line-height: 1.6;">Des espaces équipés pour vos conférences, séminaires et événements communautaires.</p>
+              <a href="services.html#location" class="btn btn-primary" style="width: 100%; justify-content: center;">Réserver</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Achievements Preview -->
+    <section id="achievements-preview" style="padding: 5rem 2rem;">
+      <div class="container">
+        <div style="text-align: center; margin-bottom: 4rem;">
+          <h2 class="section-title">Nos Réalisations</h2>
+          <p class="section-subtitle" style="margin: 0 auto;">L'impact de nos actions en chiffres et en images.</p>
+        </div>
+        <div class="grid grid-4">
+          <div class="bento-card" style="text-align: center;">
+            <div style="font-size: 2.5rem; font-weight: 700; color: #04c0ff; margin-bottom: 0.5rem;" data-count>1200+</div>
+            <div style="color: #565f67; font-weight: 500;">Jeunes Formés</div>
+          </div>
+          <div class="bento-card" style="text-align: center;">
+            <div style="font-size: 2.5rem; font-weight: 700; color: #04c0ff; margin-bottom: 0.5rem;" data-count>450+</div>
+            <div style="color: #565f67; font-weight: 500;">Femmes Autonomisées</div>
+          </div>
+          <div class="bento-card" style="text-align: center;">
+            <div style="font-size: 2.5rem; font-weight: 700; color: #04c0ff; margin-bottom: 0.5rem;" data-count>85</div>
+            <div style="color: #565f67; font-weight: 500;">PME Accompagnées</div>
+          </div>
+          <div class="bento-card" style="text-align: center;">
+            <div style="font-size: 2.5rem; font-weight: 700; color: #04c0ff; margin-bottom: 0.5rem;" data-count>30</div>
+            <div style="color: #565f67; font-weight: 500;">Partenaires</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Team Preview -->
+    <section id="team-preview" style="padding: 3rem 1rem; background: linear-gradient(180deg, #0b2e53 0%, #104a82 100%); color: white;">
+      <div class="container">
+        <div style="text-align: center; margin-bottom: 3rem;">
+          <h2 class="section-title" style="color: white;">Notre Équipe</h2>
+          <p class="section-subtitle" style="color: rgba(255,255,255,0.85); max-width: 40rem; margin: 0 auto;">
+            Des professionnels passionnés, engagés pour le développement de Guinaw Rails Sud.
+          </p>
+        </div>
+        <div class="grid grid-3">
+          <div class="bento-card" style="background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.16); color: white; text-align: center;">
+            <div style="width: 6rem; height: 6rem; margin: 0 auto 1rem; border-radius: 50%; overflow: hidden; border: 2px solid #82c1ff;">
+              <img alt="M. Mamadou Lamine Mbaye" src="/static/image/accueil/M. Mamadou Lamine Mbaye.jpeg" style="width: 100%; height: 100%; object-fit: cover;" loading="lazy">
+            </div>
+            <h4 style="font-weight: 700; margin-bottom: 0.25rem; color: white;">M. Mamadou Lamine Mbaye</h4>
+            <p style="font-size: 0.875rem; color: #82c1ff; margin-bottom: 0.75rem;">Directeur du Centre Socio-éducatif et Culturel des Jeunes et des Femmes</p>
+            <p style="font-size: 0.95rem; color: rgba(255,255,255,0.8); line-height: 1.6;">Pilote la stratégie générale et veille au développement du centre.</p>
+          </div>
+
+          <div class="bento-card" style="background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.16); color: white; text-align: center;">
+            <div style="width: 6rem; height: 6rem; margin: 0 auto 1rem; border-radius: 50%; overflow: hidden; border: 2px solid #82c1ff;">
+              <img alt="M. Doudou Ndiaye" src="/static/image/accueil/M. Doudou Ndiaye.jpeg" style="width: 100%; height: 100%; object-fit: cover;" loading="lazy">
+            </div>
+            <h4 style="font-weight: 700; margin-bottom: 0.25rem; color: white;">M. Doudou Ndiaye</h4>
+            <p style="font-size: 0.875rem; color: #82c1ff; margin-bottom: 0.75rem;">Responsable du Bureau Economique Local</p>
+            <p style="font-size: 0.95rem; color: rgba(255,255,255,0.8); line-height: 1.6;">Accompagne les porteurs de projet et structure l'offre de formation.</p>
+          </div>
+
+          <div class="bento-card" style="background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.16); color: white; text-align: center;">
+            <div style="width: 6rem; height: 6rem; margin: 0 auto 1rem; border-radius: 50%; overflow: hidden; border: 2px solid #82c1ff;">
+              <img alt="Mme. Thioro Ndiaye" src="/static/image/about/Mame Thioro Ndiaye.png" style="width: 100%; height: 100%; object-fit: cover;" loading="lazy">
+            </div>
+            <h4 style="font-weight: 700; margin-bottom: 0.25rem; color: white;">Mme. Thioro Ndiaye</h4>
+            <p style="font-size: 0.875rem; color: #82c1ff; margin-bottom: 0.75rem;">Sécrétaire Générale</p>
+            <p style="font-size: 0.95rem; color: rgba(255,255,255,0.8); line-height: 1.6;">Responsable du Centre de Formation Couture, Coiffure et Restauration.</p>
+          </div>
+        </div>
+
+        <div style="text-align: center; margin-top: 2.5rem;">
+          <a href="about.html#equipe" class="btn btn-primary">Rencontrer l'équipe</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Media Library Gallery -->
+    <section id="mediatheque" style="padding: 5rem 2rem; background-color: #f9f8f7;">
+      <div class="container">
+        <h2 class="section-title" style="margin-bottom: 2rem;">Médiathèque</h2>
+        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem;">
+
+          <div style="aspect-ratio: 1; border-radius: 0.75rem; overflow: hidden;">
+            <img alt="Centre Socio-Éducatif de Guinaw Rails Sud" src="/static/image/accueil/Centre Socio-Educatif.jpeg" style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.7s;" loading="lazy">
+          </div>
+          <div style="aspect-ratio: 1; border-radius: 0.75rem; overflow: hidden;">
+            <img alt="Atelier créatif au centre de formation" src="/static/image/accueil/Ecole de formation.jpeg" style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.7s;" loading="lazy">
+          </div>
+          
+          <div style="aspect-ratio: 1; border-radius: 0.75rem; overflow: hidden;">
+            <img alt="Angle du bâtiment principal" src="/static/image/accueil/Lieu Csecjf.jpeg" style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.7s;" loading="lazy">
+          </div>
+          
+          <div style="aspect-ratio: 1; border-radius: 0.75rem; overflow: hidden;">
+            <img alt="Activités du CSECJF" src="/static/image/blog/activitéscsecjf.jpeg" style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.7s;" loading="lazy">
+          </div>
+          <div style="aspect-ratio: 1; border-radius: 0.75rem; overflow: hidden;">
+            <img alt="Distribution de produits" src="/static/image/blog/Distributionscsecjf.jpeg" style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.7s;" loading="lazy">
+          </div>
+          <div style="aspect-ratio: 1; border-radius: 0.75rem; overflow: hidden;">
+            <img alt="Dons de machines à coudre" src="/static/image/blog/donscsecjf.jpeg" style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.7s;" loading="lazy">
+          </div>
+        </div>
+        <div style="text-align: center; margin-top: 3rem;">
+          <a href="galerie.html" class="btn btn-secondary" style="background-color: white; color: #1c1b1b; border: 1px solid #e5e2e1;">Voir toute la galerie</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Call to Action Section -->
+    <section style="padding: 4rem 2rem; background: linear-gradient(135deg, #04c0ff 0%, #004aad 100%); color: white; margin: 4rem 0;">
+      <div class="container" style="text-align: center;">
+        <h2 class="section-title" style="color: white;">Rejoignez notre communauté</h2>
+        <p style="color: rgba(255, 255, 255, 0.9); margin-bottom: 2rem; max-width: 40rem; margin-left: auto; margin-right: auto;">
+          Que vous soyez un apprenant, un bénévole ou un partenaire potentiel, votre place est parmi nous pour construire l'avenir de Guinaw Rails Sud.
+        </p>
+        <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+          <a href="contact.html" class="btn btn-primary">S'inscrire maintenant</a>
+          <a href="contact.html" class="btn btn-secondary">Nous contacter</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="footer-container">
+      <div class="footer-section">
+        <h4>CSECJF</h4>
+        <p style="color: rgba(255,255,255,.9); font-size: 0.875rem; line-height: 1.6; margin-bottom: 1rem;">Dispositif de proximité à l'économie locale</p>
+        <p style="color: rgba(255,255,255,.7); font-size: 0.75rem;">© 2026 CSECJF Guinaw Rails Sud. Tous droits réservés.</p>
+      </div>
+      <div class="footer-section">
+        <h4>Pages</h4>
+        <a href="index.html">Accueil</a>
+        <a href="about.html">À Propos</a>
+        <a href="services.html">Services</a>
+        <a href="achievements.html">Réalisations</a>
+        <a href="blog.html">Blog</a>
+      </div>
+      <div class="footer-section">
+        <h4>Ressources</h4>
+        <a href="#">Conditions d'utilisation</a>
+        <a href="#">Politique de confidentialité</a>
+        <a href="#">FAQ</a>
+          </div>
+      <div class="footer-section">
+        <h4>Suivez-nous</h4>
+        <div style="display: flex; gap: 0.75rem;">
+          <a href="https://www.facebook.com/profile.php?id=61568024399710" target="_blank" rel="noopener noreferrer" style="display: inline-flex; align-items: center; justify-content: center; width: 2.5rem; height: 2.5rem; background-color: #04c0ff; color: white; border-radius: 50%; text-decoration: none; transition: opacity 0.3s;">
+            <img src="/static/image/shared/facebook-logo (2).png" alt="Facebook" style="width: 1.75rem; height: 1.75rem;" loading="lazy">
+          </a>
+          <a href="https://www.linkedin.com/company/centre-socio-%C3%A9ducatif-des-jeunes-de-guinaw-rails/about/?viewAsMember=true" target="_blank" rel="noopener noreferrer" style="display: inline-flex; align-items: center; justify-content: center; width: 2.5rem; height: 2.5rem; background-color: #04c0ff; color: white; border-radius: 50%; text-decoration: none; transition: opacity 0.3s;">
+            <img src="/static/image/shared/linkedin-logo.png" alt="LinkedIn" style="width: 1.75rem; height: 1.75rem;" loading="lazy">
+          </a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>Construit avec passion pour Guinaw Rails Sud</p>
+    </div>
+  </footer>
+
+  <script src="/static/js/main.js" defer></script>
+</body>
+</html>

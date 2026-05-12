@@ -1,0 +1,25 @@
+{% extends "admin/base.html" %}{% load static %}
+{% block title %}Supprimer — CSECJF Admin{% endblock %}
+{% block page_title %}Confirmer la suppression{% endblock %}
+{% block breadcrumb %}<a href="{% url 'admin_dashboard' %}">Dashboard</a> / <a href="{% url 'gallery_list' %}">Galerie</a> / Supprimer{% endblock %}
+
+{% block content %}
+<div class="card" style="max-width: 500px; margin: 0 auto; text-align: center;">
+  <span class="material-symbols-outlined" style="font-size: 3rem; color: #ef4444; margin-bottom: 1rem;">delete_forever</span>
+  <h2 style="margin-bottom: 0.5rem;">Supprimer cette image ?</h2>
+  {% if image.caption %}
+  <p class="text-muted" style="margin-bottom: 1rem;">"{{ image.caption }}"</p>
+  {% endif %}
+  <img src="{{ image.image.url }}" alt="{{ image.caption }}" style="max-width:100%;max-height:200px;border-radius:0.5rem;margin-bottom:1.5rem;object-fit:cover;">
+
+  <form method="post">
+    {% csrf_token %}
+    <div class="form-actions" style="justify-content: center;">
+      <button type="submit" class="btn btn-danger">
+        <span class="material-symbols-outlined">delete</span> Oui, supprimer
+      </button>
+      <a href="{% url 'gallery_list' %}" class="btn btn-outline">Annuler</a>
+    </div>
+  </form>
+</div>
+{% endblock %}

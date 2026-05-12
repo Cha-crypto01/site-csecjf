@@ -1,0 +1,116 @@
+{% extends "admin/base.html" %}{% load static %}
+{% block title %}Dashboard — CSECJF Admin{% endblock %}
+{% block page_title %}Dashboard{% endblock %}
+{% block breadcrumb %}Dashboard{% endblock %}
+
+{% block content %}
+<div class="stat-grid">
+  <div class="stat-card">
+    <span class="icon material-symbols-outlined">article</span>
+    <div class="number">{{ total_articles }}</div>
+    <div class="label">Total articles</div>
+  </div>
+  <div class="stat-card">
+    <span class="icon material-symbols-outlined">publish</span>
+    <div class="number">{{ total_published }}</div>
+    <div class="label">Publiés</div>
+  </div>
+  <div class="stat-card">
+    <span class="icon material-symbols-outlined">edit_note</span>
+    <div class="number">{{ total_drafts }}</div>
+    <div class="label">Brouillons</div>
+  </div>
+  <div class="stat-card">
+    <span class="icon material-symbols-outlined">group</span>
+    <div class="number">{{ total_users }}</div>
+    <div class="label">Utilisateurs</div>
+  </div>
+</div>
+
+<div class="flex" style="align-items: stretch;">
+  <div style="flex: 2; min-width: 0;">
+    <div class="card">
+      <h2>Derniers articles publiés</h2>
+      {% if recent_articles %}
+      <table>
+        <thead>
+          <tr><th>Titre</th><th>Auteur</th><th>Catégorie</th><th>Date</th></tr>
+        </thead>
+        <tbody>
+          {% for article in recent_articles %}
+          <tr>
+            <td><a href="{% url 'article_edit' article.id %}" style="color:#04c0ff;text-decoration:none;">{{ article.title }}</a></td>
+            <td>{{ article.author.get_full_name|default:article.author.username }}</td>
+            <td><span class="badge badge-info">{{ article.category }}</span></td>
+            <td class="text-muted text-sm">{{ article.published_at|date:"d/m/Y H:i" }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      {% else %}
+      <div class="empty-state">
+        <span class="icon material-symbols-outlined">newspaper</span>
+        <p>Aucun article publié pour le moment.</p>
+        <a href="{% url 'article_create' %}" class="btn btn-primary mt-1">Créer un article</a>
+      </div>
+      {% endif %}
+    </div>
+  </div>
+
+  <div style="flex: 1; min-width: 280px;">
+    <div class="card">
+      <h2>Articles par catégorie</h2>
+      {% if articles_by_category %}
+      {% for item in articles_by_category %}
+      <div class="flex-between mb-1">
+        <span class="text-sm">{{ item.category }}</span>
+        <span class="badge badge-info">{{ item.count }}</span>
+      </div>
+      {% endfor %}
+      {% else %}
+      <p class="text-muted text-sm">Aucune donnée.</p>
+      {% endif %}
+    </div>
+
+    <div class="card">
+      <h2>Top auteurs</h2>
+      {% if articles_by_author %}
+      {% for item in articles_by_author %}
+      <div class="flex-between mb-1">
+        <span class="text-sm">{{ item.author__username|default:"Inconnu" }}</span>
+        <span class="badge badge-info">{{ item.count }}</span>
+      </div>
+      {% endfor %}
+      {% else %}
+      <p class="text-muted text-sm">Aucune donnée.</p>
+      {% endif %}
+    </div>
+  </div>
+</div>
+
+<div class="card" style="margin-top: 0.5rem;">
+  <h2>Activité récente</h2>
+  {% if recent_activity %}
+  <div>
+    {% for log in recent_activity %}
+    <div class="activity-item">
+      <span class="dot" style="background: {% if log.action == 'create' %}#10b981{% elif log.action == 'update' %}#3b82f6{% elif log.action == 'delete' %}#ef4444{% elif log.action == 'publish' %}#f59e0b{% else %}#94a3b8{% endif %};"></span>
+      <div class="content">
+        <div class="action-text">
+          <strong>{{ log.user.username|default:"Système" }}</strong>
+          {% if log.action == 'create' %}a créé{% elif log.action == 'update' %}a modifié{% elif log.action == 'delete' %}a supprimé{% elif log.action == 'publish' %}a publié{% elif log.action == 'unpublish' %}a dépublié{% else %}{{ log.action }}{% endif %}
+          {% if log.article %}<em>{{ log.article.title }}</em>{% endif %}
+        </div>
+        <div class="time">{{ log.created_at|timesince }}</div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+  {% else %}
+  <div class="empty-state">
+    <span class="icon material-symbols-outlined">history</span>
+    <p>Aucune activité récente.</p>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}
